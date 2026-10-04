@@ -6,7 +6,7 @@ import { UIContainer } from './ui-container';
 const meta = {
   component: UIContainer,
   tags: ['autodocs'],
-  title: 'UI Kit/UIContainer',
+  title: 'Site/UIContainer',
   parameters: { layout: 'fullscreen' },
   args: {
     children: (

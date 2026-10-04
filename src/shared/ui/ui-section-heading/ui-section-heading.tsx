@@ -2,7 +2,7 @@ import type { FC, ReactNode } from 'react';
 
 import type { cnParams } from '@/shared/lib/cn';
 import { cn } from '@/shared/lib/cn';
-import { Show } from '@/shared/ui/show';
+import { Show } from '@/shared/kit';
 import { UIReveal } from '@/shared/ui/ui-reveal';
 
 /**
@@ -42,7 +42,7 @@ export const UISectionHeading: FC<IUISectionHeadingProps> = ({
     >
       <div className={align === 'center' ? 'text-center' : undefined}>
         <Show when={Boolean(eyebrow)}>
-          <p className="text-caption font-semibold uppercase tracking-wider text-accent">
+          <p className="text-caption font-semibold uppercase tracking-wider text-brand-emphasis">
             {eyebrow}
           </p>
         </Show>

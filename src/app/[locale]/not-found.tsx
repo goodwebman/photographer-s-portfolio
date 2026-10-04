@@ -16,15 +16,15 @@ export default async function NotFound() {
   return (
     <UIContainer>
       <div className="flex min-h-[60vh] flex-col items-center justify-center py-20 text-center">
-        <p className="text-display font-bold text-accent">404</p>
+        <p className="text-display font-bold text-brand-emphasis">404</p>
         <h1 className="mt-4 text-h2 font-bold text-foreground">{t('title')}</h1>
         <p className="mt-3 max-w-md text-body text-muted-foreground">
           {t('description')}
         </p>
         <UILinkButton
           href="/"
-          variant="accent"
-          size="M"
+          variant="primary"
+          size="lg"
           className="mt-8"
           dataName="not-found-home"
         >

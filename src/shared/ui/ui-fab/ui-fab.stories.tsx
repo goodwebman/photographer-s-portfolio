@@ -11,7 +11,7 @@ import { UIFab } from './ui-fab';
 const meta = {
   component: UIFab,
   tags: ['autodocs'],
-  title: 'UI Kit/UIFab',
+  title: 'Site/UIFab',
   args: {
     visible: true,
     label: 'Наверх',

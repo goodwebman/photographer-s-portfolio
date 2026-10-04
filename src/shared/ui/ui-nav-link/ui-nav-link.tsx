@@ -7,7 +7,7 @@ import { motion } from 'motion/react';
 import { Link } from '@/shared/i18n';
 import type { cnParams } from '@/shared/lib/cn';
 import { cn } from '@/shared/lib/cn';
-import { Show } from '@/shared/ui/show';
+import { Show } from '@/shared/kit';
 
 /**
  * Вариант навигационной ссылки:

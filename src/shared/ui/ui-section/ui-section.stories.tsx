@@ -6,7 +6,7 @@ import { UISection } from './ui-section';
 const meta = {
   component: UISection,
   tags: ['autodocs'],
-  title: 'UI Kit/UISection',
+  title: 'Site/UISection',
   parameters: { layout: 'fullscreen' },
   args: {
     children: (

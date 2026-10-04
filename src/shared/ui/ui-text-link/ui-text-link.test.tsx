@@ -14,15 +14,15 @@ afterEach(() => {
 });
 
 describe('UITextLink', () => {
-  it('тон accent по умолчанию', () => {
-    renderWithIntl(<UITextLink href="/projects">Все проекты</UITextLink>);
+  it('тон brand по умолчанию', () => {
+    renderWithIntl(<UITextLink href="/portfolio">Все работы</UITextLink>);
 
-    expect(screen.getByRole('link')).toHaveClass('text-accent');
+    expect(screen.getByRole('link')).toHaveClass('text-brand-emphasis');
   });
 
   it('тон muted — приглушённая инлайновая ссылка с местом под иконку', () => {
     renderWithIntl(
-      <UITextLink href="/projects" tone="muted">
+      <UITextLink href="/portfolio" tone="muted">
         Назад
       </UITextLink>,
     );

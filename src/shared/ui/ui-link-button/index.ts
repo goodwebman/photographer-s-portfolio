@@ -1,1 +1,6 @@
-export { UILinkButton, type IUILinkButtonProps } from './ui-link-button';
+export {
+  UILinkButton,
+  type IUILinkButtonProps,
+  type UILinkButtonSize,
+  type UILinkButtonVariant,
+} from './ui-link-button';

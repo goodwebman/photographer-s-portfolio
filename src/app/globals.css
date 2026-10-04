@@ -88,6 +88,10 @@
 
   --animate-rainbow-text: rainbow-text 3s linear infinite;
   --animate-glow-pulse: glow-pulse 4s ease-in-out infinite;
+
+  /* UI-кит: утилиты animate-shimmer / animate-progress (UISkeleton, UIProgress) */
+  --animate-shimmer: ui-shimmer 1.8s infinite linear;
+  --animate-progress: ui-progress 1.4s ease-in-out infinite;
 }
 
 @layer base {
@@ -159,5 +163,36 @@ button:not(:disabled),
 @media (prefers-reduced-motion: reduce) {
   .animate-avatar-spin {
     animation: none;
+  }
+}
+
+/* --- UI-кит: keyframes и reduced-motion (перенесено из tokens.css кита) --- */
+@keyframes ui-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes ui-progress {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(350%); }
+}
+
+/* Бесконечная лента UIMarquee: две копии трека, сдвиг на половину → бесшовный
+   цикл. Длительность/направление UIMarquee задаёт инлайном. */
+@keyframes ui-marquee {
+  to { transform: translateX(-50%); }
+}
+
+/* Системная настройка «уменьшить движение»: гасим transitions/animations
+   (UIMarquee замирает, shimmer/progress стоят). JS-анимации (motion, GSAP)
+   уважают её сами через useReducedMotion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

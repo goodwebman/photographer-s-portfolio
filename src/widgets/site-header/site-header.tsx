@@ -11,7 +11,7 @@ import { NAV, SITE } from '@/shared/config';
 import { usePathname } from '@/shared/i18n';
 import { cn } from '@/shared/lib/cn';
 import { useMediaQuery, useScrolledPast } from '@/shared/lib/hooks';
-import { UIIconButton, UILogo, UINavLink, UIThemeToggle } from '@/shared/ui';
+import { UIButton, UILogo, UINavLink, UIThemeToggle } from '@/shared/ui';
 
 import { LanguageSwitcher } from './language-switcher';
 
@@ -90,12 +90,13 @@ export const SiteHeader: FC = () => {
               labelToLight={t('themeToLight')}
               className="max-md:bg-transparent max-md:border-transparent"
             />
-            <UIIconButton
-              label={open ? t('closeMenu') : t('openMenu')}
+            <UIButton
+              aria-label={open ? t('closeMenu') : t('openMenu')}
               variant="ghost"
+              size="icon"
               className="md:hidden"
               aria-expanded={open}
-              dataName="menu"
+              testId="menu"
               onClick={() => {
                 setOpen((v) => !v);
               }}
@@ -112,7 +113,7 @@ export const SiteHeader: FC = () => {
                   {open ? <LuX className="size-5" /> : <LuMenu className="size-5" />}
                 </motion.span>
               </AnimatePresence>
-            </UIIconButton>
+            </UIButton>
           </div>
         </motion.div>
 

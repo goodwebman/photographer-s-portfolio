@@ -5,17 +5,31 @@ import { useTransition } from 'react';
 
 import { useLocale, useTranslations } from 'next-intl';
 
-import { routing, usePathname, useRouter } from '@/shared/i18n';
+import {
+  LOCALE_NATIVE_NAMES,
+  routing,
+  usePathname,
+  useRouter,
+  type Locale,
+} from '@/shared/i18n';
 import type { cnParams } from '@/shared/lib/cn';
-import { UIButton } from '@/shared/ui';
+import { cn } from '@/shared/lib/cn';
+import { UISelect } from '@/shared/ui';
 
 export interface ILanguageSwitcherProps {
   readonly className?: cnParams | string;
 }
 
+const isLocale = (value: string): value is Locale =>
+  (routing.locales as readonly string[]).includes(value);
+
 /**
- * Переключатель языка. Меняет локаль, сохраняя текущий путь (next-intl router).
- * Навигация обёрнута в `useTransition` — не блокирует UI на переходе.
+ * Переключатель языка на `UISelect` кита. Меняет локаль, сохраняя текущий путь
+ * (next-intl router). Навигация обёрнута в `useTransition` — не блокирует UI.
+ *
+ * `UISelect`, а не `UIDropdownMenu`: у дропдауна кита нет закрытия по клику
+ * снаружи, а выбор одного значения из списка — семантически listbox.
+ * Триггер показывает код локали (`ru` → `RU` через `uppercase`).
  */
 export const LanguageSwitcher: FC<ILanguageSwitcherProps> = ({ className }) => {
   const t = useTranslations('Header');
@@ -23,22 +37,37 @@ export const LanguageSwitcher: FC<ILanguageSwitcherProps> = ({ className }) => {
   const router = useRouter();
   const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
-  const next = routing.locales.find((item) => item !== locale) ?? routing.defaultLocale;
+
+  const onChange = (next: string) => {
+    if (!isLocale(next) || next === locale) return;
+    startTransition(() => {
+      router.replace(pathname, { locale: next });
+    });
+  };
 
   return (
-    <UIButton
-      variant="outline"
-      size="S"
-      aria-label={t('language')}
-      disabled={isPending}
-      className={className}
-      onClick={() => {
-        startTransition(() => {
-          router.replace(pathname, { locale: next });
-        });
-      }}
+    <UISelect
+      value={locale}
+      onValueChange={onChange}
+      ariaLabel={t('language')}
+      placement="bottom-end"
+      testId="locale"
+      className={cn(
+        'w-auto text-eyebrow uppercase [&>button]:h-9 [&>button]:gap-1 [&>button]:border-transparent [&>button]:bg-transparent [&>button]:px-2',
+        isPending && 'opacity-70',
+        className,
+      )}
     >
-      {next.toUpperCase()}
-    </UIButton>
+      {routing.locales.map((item) => (
+        <UISelect.Option
+          key={item}
+          value={item}
+          lang={item}
+          className="normal-case tracking-normal"
+        >
+          {LOCALE_NATIVE_NAMES[item]}
+        </UISelect.Option>
+      ))}
+    </UISelect>
   );
 };

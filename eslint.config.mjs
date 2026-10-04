@@ -14,6 +14,9 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Storybook build output — не линтим минифицированные бандлы.
     "storybook-static/**",
+    // Вендоренный UI-кит: правится только по списку локальных правок
+    // (src/shared/kit/README.md), у него свои правила линтинга в апстриме.
+    "src/shared/kit/**",
   ]),
 ]);
 

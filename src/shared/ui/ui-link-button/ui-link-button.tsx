@@ -1,69 +1,75 @@
 import type { FC, ReactNode } from 'react';
 
+import type { VariantProps } from 'class-variance-authority';
+
 import { Link } from '@/shared/i18n';
+import { buttonVariants } from '@/shared/kit';
 import { getHrefKind } from '@/shared/lib/href';
 import type { cnParams } from '@/shared/lib/cn';
 import { cn } from '@/shared/lib/cn';
-import {
-  uiButtonClassNames,
-  type UIButtonSize,
-  type UIButtonVariant,
-} from '@/shared/ui/ui-button';
+
+type ButtonVariantProps = VariantProps<typeof buttonVariants>;
+
+/** Визуальный вариант — тот же набор, что у `UIButton` кита. */
+export type UILinkButtonVariant = NonNullable<ButtonVariantProps['variant']>;
+/** Размер — тот же набор, что у `UIButton` кита. */
+export type UILinkButtonSize = NonNullable<ButtonVariantProps['size']>;
 
 /**
  * # Интерфейс пропсов для компонента UILinkButton
  * @interface IUILinkButtonProps
  * @property {string} href - адрес: маршрут приложения, http(s) или mailto/tel
  * @property {ReactNode} children - содержимое
- * @property {UIButtonVariant} [variant] - визуальный вариант (как у `UIButton`)
- * @property {UIButtonSize} [size] - размер; `undefined` — адаптивный
+ * @property {UILinkButtonVariant} [variant] - визуальный вариант (как у `UIButton`)
+ * @property {UILinkButtonSize} [size] - размер (как у `UIButton`)
  * @property {boolean} [fullWidth] - растянуть на всю ширину
+ * @property {string} [ariaLabel] - доступное имя, если текста ссылки недостаточно
  * @property {cnParams | string} [className] - доп. классы
  * @property {string} [dataName] - суффикс для `data-name`
  */
 export interface IUILinkButtonProps {
   readonly href: string;
   readonly children: ReactNode;
-  readonly variant?: UIButtonVariant;
-  readonly size?: UIButtonSize;
+  readonly variant?: UILinkButtonVariant;
+  readonly size?: UILinkButtonSize;
   readonly fullWidth?: boolean;
+  readonly ariaLabel?: string;
   readonly className?: cnParams | string;
   readonly dataName?: string;
 }
 
 /**
- * Навигационный CTA: выглядит как `UIButton`, семантически — ссылка.
+ * Навигационный CTA: выглядит как `UIButton` кита, семантически — ссылка.
  *
- * Элемент выбирается по `href` ({@link getHrefKind}): маршрут приложения —
- * locale-aware `<Link>`, http(s) — `<a target="_blank" rel="noopener noreferrer">`,
- * `mailto:`/`tel:` — обычный `<a>`. Server-safe: без хуков и `'use client'`,
- * поэтому используется прямо в RSC.
+ * Классы берутся из `buttonVariants` кита (модуль без `'use client'`), поэтому
+ * компонент server-safe и используется прямо в RSC. Элемент выбирается по
+ * `href` ({@link getHrefKind}): маршрут приложения — locale-aware `<Link>`,
+ * http(s) — `<a target="_blank" rel="noopener noreferrer">`, `mailto:`/`tel:` —
+ * обычный `<a>`.
  *
  * @component
  * @example
  * ```tsx
- * <UILinkButton href="/projects" variant="accent" size="M">Смотреть проекты</UILinkButton>
+ * <UILinkButton href="/portfolio" variant="primary" size="lg">Смотреть работы</UILinkButton>
  * ```
  */
 export const UILinkButton: FC<IUILinkButtonProps> = ({
   href,
   children,
-  variant = 'accent',
-  size,
+  variant = 'primary',
+  size = 'md',
   fullWidth = false,
+  ariaLabel,
   className,
   dataName,
 }) => {
-  const classNames = cn(
-    uiButtonClassNames({ variant, size, fullWidth }),
-    className,
-  );
+  const classNames = cn(buttonVariants({ variant, size }), fullWidth && 'w-full', className);
   const name = dataName ? `UILinkButton-${dataName}` : 'UILinkButton';
   const kind = getHrefKind(href);
 
   if (kind === 'internal') {
     return (
-      <Link href={href} data-name={name} className={classNames}>
+      <Link href={href} aria-label={ariaLabel} data-name={name} className={classNames}>
         {children}
       </Link>
     );
@@ -72,6 +78,7 @@ export const UILinkButton: FC<IUILinkButtonProps> = ({
   return (
     <a
       href={href}
+      aria-label={ariaLabel}
       data-name={name}
       className={classNames}
       target={kind === 'external' ? '_blank' : undefined}

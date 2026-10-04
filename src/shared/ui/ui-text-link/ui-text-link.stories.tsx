@@ -8,14 +8,14 @@ import { UITextLink } from './ui-text-link';
 const meta = {
   component: UITextLink,
   tags: ['autodocs'],
-  title: 'UI Kit/UITextLink',
+  title: 'Site/UITextLink',
   args: {
-    href: '/projects',
-    children: 'Все проекты →',
-    tone: 'accent',
+    href: '/portfolio',
+    children: 'Все работы →',
+    tone: 'brand',
   },
   argTypes: {
-    tone: { control: 'inline-radio', options: ['accent', 'muted'] },
+    tone: { control: 'inline-radio', options: ['brand', 'muted'] },
   },
 } satisfies Meta<typeof UITextLink>;
 
@@ -23,7 +23,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Accent: Story = {};
+export const Brand: Story = {};
 
 /** Тон `muted` держит иконку и текст на одной линии — ссылка «назад». */
 export const Muted: Story = {

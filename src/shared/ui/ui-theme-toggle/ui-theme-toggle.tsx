@@ -9,7 +9,7 @@ import { LuMoon, LuSun } from 'react-icons/lu';
 import type { cnParams } from '@/shared/lib/cn';
 import { useCn } from '@/shared/lib/cn';
 import { useTheme } from '@/shared/theme';
-import { Show } from '@/shared/ui/show';
+import { Show } from '@/shared/kit';
 
 /**
  * # Интерфейс пропсов для компонента UIThemeToggle

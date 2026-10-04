@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { UIButton } from '@/shared/ui/ui-button';
+import { UIButton } from '@/shared/kit';
 
 import { UISectionHeading } from './ui-section-heading';
 
@@ -11,7 +11,7 @@ import { UISectionHeading } from './ui-section-heading';
 const meta = {
   component: UISectionHeading,
   tags: ['autodocs'],
-  title: 'UI Kit/UISectionHeading',
+  title: 'Site/UISectionHeading',
   decorators: [
     (Story) => (
       <div className="w-full max-w-3xl">
@@ -20,9 +20,9 @@ const meta = {
     ),
   ],
   args: {
-    title: 'Избранные проекты',
+    title: 'Мои работы',
     eyebrow: 'Портфолио',
-    description: 'Кейсы: от идеи до продакшена — с фокусом на фронтенде.',
+    description: 'Стрит, портреты, love story и детские съёмки в Омске.',
     align: 'left',
   },
   argTypes: {
@@ -51,8 +51,8 @@ export const TitleOnly: Story = {
 export const WithAction: Story = {
   args: {
     action: (
-      <UIButton variant="outline" size="S">
-        Все проекты
+      <UIButton variant="outline" size="sm">
+        Все работы
       </UIButton>
     ),
   },

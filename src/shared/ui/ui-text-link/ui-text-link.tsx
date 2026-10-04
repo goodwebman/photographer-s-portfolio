@@ -6,14 +6,14 @@ import type { cnParams } from '@/shared/lib/cn';
 import { cn } from '@/shared/lib/cn';
 
 /** Тон текстовой ссылки. */
-export type UITextLinkTone = 'accent' | 'muted';
+export type UITextLinkTone = 'brand' | 'muted';
 
 /**
  * Полные наборы классов на тон — строковыми литералами, чтобы сканер Tailwind
  * видел каждый класс (динамическая склейка утилит из JIT выпадает).
  */
 const TONE_CLASSES: Record<UITextLinkTone, string> = {
-  accent: 'text-small font-medium text-accent transition-opacity hover:opacity-80',
+  brand: 'text-small font-medium text-brand-emphasis transition-opacity hover:opacity-80',
   muted:
     'inline-flex items-center gap-1.5 text-small text-muted-foreground transition-colors hover:text-foreground',
 };
@@ -44,7 +44,7 @@ export interface IUITextLinkProps {
 export const UITextLink: FC<IUITextLinkProps> = ({
   href,
   children,
-  tone = 'accent',
+  tone = 'brand',
   className,
   dataName,
 }) => {

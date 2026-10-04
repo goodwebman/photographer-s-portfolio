@@ -9,7 +9,7 @@ import { UIWordReveal } from './ui-word-reveal';
 const meta = {
   component: UIWordReveal,
   tags: ['autodocs'],
-  title: 'UI Kit/UIWordReveal',
+  title: 'Site/UIWordReveal',
   args: {
     text: 'Данил Шебалов',
     as: 'h1',

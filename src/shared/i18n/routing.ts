@@ -7,3 +7,12 @@ export const routing = defineRouting({
 });
 
 export type Locale = (typeof routing.locales)[number];
+
+/**
+ * Самоназвания языков для переключателя. Не переводятся: язык в списке всегда
+ * подписан на самом себе, чтобы его нашёл тот, кто другой не читает.
+ */
+export const LOCALE_NATIVE_NAMES: Record<Locale, string> = {
+  ru: 'Русский',
+  en: 'English',
+};

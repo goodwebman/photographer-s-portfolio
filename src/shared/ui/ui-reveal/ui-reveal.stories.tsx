@@ -9,7 +9,7 @@ import { UIReveal } from './ui-reveal';
 const meta = {
   component: UIReveal,
   tags: ['autodocs'],
-  title: 'UI Kit/UIReveal',
+  title: 'Site/UIReveal',
   args: {
     delay: 0,
     y: 24,

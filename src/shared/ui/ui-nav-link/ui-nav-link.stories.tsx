@@ -9,7 +9,7 @@ import { UINavLink } from './ui-nav-link';
 const meta = {
   component: UINavLink,
   tags: ['autodocs'],
-  title: 'UI Kit/UINavLink',
+  title: 'Site/UINavLink',
   args: {
     href: '/projects',
     children: 'Проекты',

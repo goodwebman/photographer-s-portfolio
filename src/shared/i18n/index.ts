@@ -1,4 +1,4 @@
-export { routing, type Locale } from './routing';
+export { LOCALE_NATIVE_NAMES, routing, type Locale } from './routing';
 export {
   Link,
   redirect,

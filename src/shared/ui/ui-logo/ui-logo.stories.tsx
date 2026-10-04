@@ -8,7 +8,7 @@ import { UILogo } from './ui-logo';
 const meta = {
   component: UILogo,
   tags: ['autodocs'],
-  title: 'UI Kit/UILogo',
+  title: 'Site/UILogo',
   args: {
     name: SITE.name,
     variant: 'header',

@@ -9,7 +9,7 @@ import { UIThemeToggle } from './ui-theme-toggle';
 const meta = {
   component: UIThemeToggle,
   tags: ['autodocs'],
-  title: 'UI Kit/UIThemeToggle',
+  title: 'Site/UIThemeToggle',
   args: {},
 } satisfies Meta<typeof UIThemeToggle>;
 
