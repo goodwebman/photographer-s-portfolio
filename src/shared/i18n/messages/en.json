@@ -1,0 +1,61 @@
+{
+  "Meta": {
+    "title": "Apollinaria — photographer in Omsk",
+    "role": "Photographer",
+    "description": "Beautiful, honest, alive photos you'll be proud of. Individual, couple and group shoots in studios and around Omsk.",
+    "keywords": "photographer Omsk, photo shoot Omsk, love story Omsk, portrait photographer Omsk, kids photo shoot Omsk",
+    "aboutTitle": "About",
+    "aboutDescription": "Polina is a photographer in Omsk. Help with styling, location and posing.",
+    "portfolioTitle": "Portfolio",
+    "portfolioDescription": "Street, portraits, love stories and kids shoots in Omsk.",
+    "servicesTitle": "Services & pricing",
+    "servicesDescription": "Individual, couple and group shoots: what's included and what it costs.",
+    "contactTitle": "Contact",
+    "contactDescription": "Bookings and questions — on Telegram.",
+    "shootNotFound": "Series not found"
+  },
+  "Site": {
+    "name": "Apollinaria",
+    "role": "Photographer",
+    "city": "Omsk",
+    "mission": "I'm Polina, and my job is to create beautiful, honest, alive photos of you — the kind you'll be proud of."
+  },
+  "Nav": {
+    "home": "Home",
+    "about": "About",
+    "portfolio": "Portfolio",
+    "services": "Services",
+    "contact": "Contact"
+  },
+  "Header": {
+    "mainNav": "Main navigation",
+    "mobileNav": "Mobile navigation",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "language": "Language",
+    "themeToDark": "Switch to dark theme",
+    "themeToLight": "Switch to light theme"
+  },
+  "Footer": {
+    "sections": "Sections",
+    "contacts": "Contacts",
+    "footerNav": "Footer navigation",
+    "copyright": "© {year} {brand}"
+  },
+  "Common": {
+    "close": "Close",
+    "prev": "Previous",
+    "next": "Next",
+    "backToTop": "Back to top",
+    "metaDisclaimer": "* Instagram is owned by Meta, which is designated an extremist organisation and banned in the Russian Federation"
+  },
+  "Socials": {
+    "telegram": "Telegram",
+    "instagram": "Instagram*"
+  },
+  "NotFound": {
+    "title": "This frame didn't develop",
+    "description": "This page doesn't exist or has moved. Check the address or head back home.",
+    "home": "Back home"
+  }
+}
