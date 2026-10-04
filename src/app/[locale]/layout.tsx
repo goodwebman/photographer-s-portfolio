@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 
@@ -17,26 +16,12 @@ import {
   SITE_URL,
 } from '@/shared/lib/seo';
 import { THEME_STORAGE_KEY, type Theme } from '@/shared/theme';
-import { JsonLd } from '@/shared/ui';
+import { JsonLd, UIFilmGrain } from '@/shared/ui';
 import { SiteFooter } from '@/widgets/site-footer';
 import { SiteHeader } from '@/widgets/site-header';
 
+import { fontVariables } from '../fonts';
 import { Providers } from '../providers';
-
-// Набор символов намеренно только latin: кириллица отрисовывается системным
-// шрифтом из фолбэка `--font-sans`. Добавление cyrillic-подмножества утяжелило
-// бы загрузку и изменило бы начертание русского текста.
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-  display: 'swap',
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-  display: 'swap',
-});
 
 interface LocaleLayoutProps {
   readonly children: React.ReactNode;
@@ -51,8 +36,8 @@ export function generateStaticParams(): { locale: string }[] {
 /** Цвет системного UI браузера под обе темы + разрешение обеих схем. */
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f6f2ec' },
-    { media: '(prefers-color-scheme: dark)', color: '#0a0a0b' },
+    { media: '(prefers-color-scheme: light)', color: '#f4efe8' },
+    { media: '(prefers-color-scheme: dark)', color: '#0e0e0f' },
   ],
   colorScheme: 'dark light',
 };
@@ -138,7 +123,7 @@ export default async function LocaleLayout({
       lang={locale}
       data-theme={theme}
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full`}
+      className={`${fontVariables} h-full`}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground antialiased">
         <JsonLd
@@ -158,6 +143,7 @@ export default async function LocaleLayout({
             <SiteFooter />
           </Providers>
         </NextIntlClientProvider>
+        <UIFilmGrain dataName="site" />
       </body>
     </html>
   );

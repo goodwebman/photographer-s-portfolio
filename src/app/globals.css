@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
-/* dark-вариант по data-атрибуту (не по .dark и не по prefers-color-scheme) */
+/* dark-вариант по data-атрибуту (не по .dark и не по prefers-color-scheme).
+   Работает и для локально тёмных секций: `<section data-theme="dark">`. */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* Плавный скролл (в т.ч. программный scroll-to-top при навигации); отключаем при reduced-motion */
@@ -10,58 +11,174 @@
   }
 }
 
-/* --- РАНТАЙМ-ТОКЕНЫ (значения дефолтные, подгоняются под Figma) --- */
+/* ============================================================
+   РАНТАЙМ-ТОКЕНЫ
+   Имена совпадают с UI-китом (src/shared/kit) — его компоненты окрашиваются
+   палитрой сайта без правок. Семантика кита: `--accent` — тихая hover-подложка,
+   НЕ бренд. Бренд-красный — `--brand*`.
+
+   «День» — тёплая бумага (реф. 1), «Ночь» — чернила и красный (реф. 3).
+   Контраст пар посчитан (WCAG AA): muted-foreground на background/card/muted
+   ≥ 4.9:1, brand-foreground на brand ≥ 6:1, brand-emphasis на тёмном
+   background ≈ 4.9:1. Ограничения «Ночи»: brand-emphasis на muted — 4.25:1
+   (не ставить), на paper — 4.5:1 (только крупный текст); текст на brand —
+   только brand-foreground с непрозрачностью ≥ 90%.
+   ============================================================ */
 :root,
 [data-theme="light"] {
   color-scheme: light;
-  --background: #f6f2ec;
-  --foreground: #2c2823;
-  --card: #fbf8f4;
-  --card-foreground: #2c2823;
-  --muted: #ece6de;
-  --muted-foreground: #898076;
-  --border: #dbd3c9;
-  --ring: #c4906a;
-  --accent: #c4906a;
-  --accent-foreground: #fbf8f4;
-  --accent-muted: #efe5db;
+  --radius: 0.25rem;
+
+  --background: #f4efe8;
+  --foreground: #151413;
+  --card: #fbf9f5;
+  --card-foreground: #151413;
+  --popover: #fbf9f5;
+  --popover-foreground: #151413;
+  --muted: #eae3d9;
+  --muted-foreground: #675e55;
+  --accent: #ede6dc;
+  --accent-foreground: #151413;
+  --primary: #151413;
+  --primary-foreground: #f4efe8;
+  --secondary: #eae3d9;
+  --secondary-foreground: #151413;
+  --border: #dcd3c7;
+  --input: #d3c9bc;
+  --ring: #a3141a;
+
+  /* бренд: заливка красных блоков, текст на ней, красный текст на фоне */
+  --brand: #a3141a;
+  --brand-foreground: #fbf9f5;
+  --brand-emphasis: #a3141a;
+  /* тёплые плашки (текстовые плитки, контакты) */
+  --paper: #e9ddcd;
+
+  /* статусы — значения кита (tokens.css, :root) */
+  --destructive: oklch(0.57 0.23 27);
+  --destructive-foreground: oklch(0.99 0 0);
+  --success: oklch(0.62 0.17 150);
+  --success-foreground: oklch(0.99 0 0);
+  --warning: oklch(0.76 0.16 68);
+  --warning-foreground: oklch(0.28 0.06 68);
+  --info: oklch(0.6 0.15 240);
+  --info-foreground: oklch(0.99 0 0);
+  --success-emphasis: oklch(0.48 0.17 150);
+  --destructive-emphasis: oklch(0.505 0.23 27);
+  --info-emphasis: oklch(0.495 0.15 240);
+  --warning-emphasis: oklch(0.525 0.16 68);
 }
 
 [data-theme="dark"] {
   color-scheme: dark;
-  --background: #0a0a0b;
-  --foreground: #ededed;
-  --card: #131316;
-  --card-foreground: #ededed;
-  --muted: #1c1c20;
-  --muted-foreground: #a1a1aa;
-  --border: #26262b;
-  --ring: #8b7bff;
-  --accent: #8b7bff;
-  --accent-foreground: #0a0a0b;
-  --accent-muted: #211d3a;
+
+  --background: #0e0e0f;
+  --foreground: #efe9e1;
+  --card: #161618;
+  --card-foreground: #efe9e1;
+  --popover: #161618;
+  --popover-foreground: #efe9e1;
+  --muted: #1e1e21;
+  --muted-foreground: #9c948a;
+  --accent: #232327;
+  --accent-foreground: #efe9e1;
+  --primary: #efe9e1;
+  --primary-foreground: #0e0e0f;
+  --secondary: #1e1e21;
+  --secondary-foreground: #efe9e1;
+  --border: #2a2a2e;
+  --input: #333338;
+  --ring: #e5484d;
+
+  --brand: #b3151b;
+  --brand-foreground: #f4efe8;
+  --brand-emphasis: #e5484d;
+  --paper: #1a1816;
+
+  /* статусы — значения кита (tokens.css, .dark) */
+  --destructive: oklch(0.645 0.22 27);
+  --destructive-foreground: oklch(0.14 0.03 27);
+  --success: oklch(0.7 0.16 150);
+  --success-foreground: oklch(0.14 0.03 150);
+  --warning: oklch(0.8 0.15 68);
+  --warning-foreground: oklch(0.2 0.04 68);
+  --info: oklch(0.7 0.15 240);
+  --info-foreground: oklch(0.14 0.03 240);
+  --success-emphasis: oklch(0.7 0.16 150);
+  --destructive-emphasis: oklch(0.71 0.22 27);
+  --info-emphasis: oklch(0.7 0.15 240);
+  --warning-emphasis: oklch(0.8 0.15 68);
 }
 
-/* --- СТАТИЧЕСКИЕ ТОКЕНЫ + проброс рантайм-переменных в утилиты --- */
+/* ============================================================
+   СТАТИЧЕСКИЕ ТОКЕНЫ + проброс рантайм-переменных в утилиты
+   inline = ссылка на var(), поэтому утилиты читают актуальное значение темы
+   (в т.ч. локальной темы секции).
+   ============================================================ */
 @theme inline {
+  /* --- полный блок привязок кита --- */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-  --color-border: var(--border);
-  --color-ring: var(--ring);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
-  --color-accent-muted: var(--accent-muted);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-success-emphasis: var(--success-emphasis);
+  --color-destructive-emphasis: var(--destructive-emphasis);
+  --color-info-emphasis: var(--info-emphasis);
+  --color-warning-emphasis: var(--warning-emphasis);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
 
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  /* --- бренд --- */
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-emphasis: var(--brand-emphasis);
+  --color-paper: var(--paper);
 
+  /* --- радиусы кита от --radius (0.25rem): sm = 0, md = 2px, lg = 4px, xl = 8px.
+         Фото и карточки без скругления, пилюли — только бейджи. --- */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-pill: 9999px;
 
-  --text-display: clamp(2.5rem, 6vw, 4.5rem);
-  --text-display--line-height: 1.04;
+  /* --- гарнитуры (next/font проставляет переменные на <html>) --- */
+  --font-serif: var(--font-playfair), ui-serif, Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+
+  /* --- типографическая шкала ---
+     hero — только «АПОЛЛИНАРИЯ» в hero: обязано влезать одной строкой на
+     360 / 768 / 1440 px. Замер в Chrome (Playfair Display, ls -0.02em):
+     «АПОЛЛИНАРИЯ» = 7.44em, «APOLLINARIA» = 6.15em — ограничивает кириллица.
+     11.5vw, а не стартовые 10.5vw: при 10.5vw на 360px hero (37.8px) мельче
+     минимума text-display (40px) — имя проигрывало заголовкам секций.
+     При 11.5vw: 360 → 41.4px = 308px из 328 доступных, 768 → 88.3px = 657
+     из 720, 1440 → 165.6px = 1231 из 1376 (поля 16/24/32px). Потолок 11rem
+     (1308px) — с ~1530px. */
+  --text-hero: clamp(2.25rem, 11.5vw, 11rem);
+  --text-hero--line-height: 0.9;
+  --text-hero--letter-spacing: -0.02em;
+  --text-display: clamp(2.5rem, 7vw, 6rem);
+  --text-display--line-height: 1;
   --text-display--letter-spacing: -0.02em;
   --text-h1: clamp(2rem, 4vw, 3rem);
   --text-h1--line-height: 1.08;
@@ -72,22 +189,18 @@
   --text-h3: 1.5rem;
   --text-h3--line-height: 1.3;
   --text-body: 1rem;
+  --text-body--line-height: 1.6;
   --text-small: 0.875rem;
+  --text-small--line-height: 1.5;
   --text-caption: 0.75rem;
+  --text-caption--line-height: 1.4;
+  /* eyebrow: sans, капс, разрядка (реф. 2). Капс — классом `uppercase`. */
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: 1.4;
+  --text-eyebrow--letter-spacing: 0.2em;
+  --text-eyebrow--font-weight: 500;
 
-  --radius-card: 1.25rem;
-  --radius-pill: 9999px;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-
-  /**
-   * Пропорции скриншотов проектов (1280×608). Совпадает с исходниками, поэтому
-   * обложки и галерея показываются целиком — вместе с `object-contain` кадр
-   * никогда не подрезается.
-   */
-  --aspect-screenshot: 1280 / 608;
-
-  --animate-rainbow-text: rainbow-text 3s linear infinite;
-  --animate-glow-pulse: glow-pulse 4s ease-in-out infinite;
 
   /* UI-кит: утилиты animate-shimmer / animate-progress (UISkeleton, UIProgress) */
   --animate-shimmer: ui-shimmer 1.8s infinite linear;
@@ -104,8 +217,8 @@
   }
 
   ::selection {
-    background-color: var(--accent);
-    color: var(--accent-foreground);
+    background-color: var(--brand);
+    color: var(--brand-foreground);
   }
 }
 
@@ -121,13 +234,6 @@ button:not(:disabled),
   cursor: pointer;
 }
 
-  @media (prefers-reduced-motion: no-preference) {
-    html {
-      scroll-behavior: smooth;
-
-    }
-  }
-
 /* Стартовые (скрытые) состояния для GSAP-ревилов — только когда анимации
    разрешены. При reduced-motion контент виден сразу (JS-ревил пропускается),
    и вспышки «видно → анимируется» не возникает. */
@@ -140,29 +246,8 @@ button:not(:disabled),
     opacity: 0;
     transform: translateY(24px);
   }
-}
-
-/* --- Анимации --- */
-@keyframes rainbow-text {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 200% 50%; }
-}
-
-@keyframes glow-pulse {
-  0%, 100% { opacity: 0.6; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.05); }
-}
-
-/* Медленное вращение градиентного halo вокруг аватара */
-@keyframes avatar-spin {
-  to { transform: rotate(360deg); }
-}
-.animate-avatar-spin {
-  animation: avatar-spin 6s linear infinite;
-}
-@media (prefers-reduced-motion: reduce) {
-  .animate-avatar-spin {
-    animation: none;
+  [data-gsap="line"] {
+    transform: scaleY(0);
   }
 }
 

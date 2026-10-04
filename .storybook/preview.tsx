@@ -4,12 +4,16 @@ import { NextIntlClientProvider } from 'next-intl';
 
 import { ThemeProvider, type Theme } from '@/shared/theme';
 
+import { fontVariables } from '@/app/fonts';
+
 // Токены дизайн-системы + Tailwind. Без этого импорта компоненты без стилей.
 import '@/app/globals.css';
 
 /**
  * Оборачивает каждую историю в провайдеры проекта:
- * - `data-theme` на контейнере → резолвятся CSS-переменные токенов (bg/fg/accent);
+ * - `data-theme` на контейнере → резолвятся CSS-переменные токенов (bg/fg/brand);
+ * - классы `next/font` на контейнере → `font-serif` / `font-sans` получают
+ *   Playfair Display и Inter Tight, как `<html>` в приложении;
  * - `ThemeProvider` (key по теме → чистый ремоунт при переключении в тулбаре) —
  *   нужен `UIThemeToggle`;
  * - `NextIntlClientProvider` — нужен locale-aware `Link` в карточках и ссылках.
@@ -23,7 +27,7 @@ const withProviders: Decorator = (Story, context) => {
         {/* isolate → обёртка = корень stacking-context, как body в приложении. */}
         <div
           data-theme={theme}
-          className="isolate bg-background p-10 text-foreground"
+          className={`${fontVariables} isolate bg-background p-10 font-sans text-foreground`}
         >
           <Story />
         </div>

@@ -7,6 +7,11 @@ export { JsonLd, type IJsonLdProps } from './json-ld';
 export { UIContainer, type IUIContainerProps } from './ui-container';
 export { UIFab, type IUIFabProps } from './ui-fab';
 export {
+  FILM_GRAIN_IMAGE,
+  UIFilmGrain,
+  type IUIFilmGrainProps,
+} from './ui-film-grain';
+export {
   UIIconLink,
   type IUIIconLinkProps,
   type UIIconLinkVariant,

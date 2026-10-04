@@ -1,18 +1,32 @@
 import { extendTailwindMerge } from 'tailwind-merge';
 
 /**
- * Кастомная типографическая шкала из `@theme` (`--text-display`, `--text-h1`…).
+ * Кастомная типографическая шкала из `@theme` (`--text-hero`, `--text-display`,
+ * `--text-h1`…, `--text-eyebrow`).
  *
  * Регистрируем её как группу `font-size`, иначе tailwind-merge принимает
  * `text-small` за цвет текста и вычёркивает его при встрече с
- * `text-muted-foreground` — размер молча теряется. Из-за этого до регистрации
- * `UITag`, `UISkill`, `UISelect`, `UINavLink` и мелкие `UIButton` рендерились
- * унаследованным размером вместо заданного токеном.
+ * `text-muted-foreground` — размер молча теряется. Тот же баг был в голом
+ * `twMerge` UI-кита — поэтому кит тоже ходит через этот `cn`.
  */
-const FONT_SIZES = ['display', 'h1', 'h2', 'h3', 'h4', 'body', 'small', 'caption'];
+const FONT_SIZES = [
+  'hero',
+  'display',
+  'h1',
+  'h2',
+  'h3',
+  'body',
+  'small',
+  'caption',
+  'eyebrow',
+];
 
-/** Кастомные радиусы из `@theme` (`--radius-card`, `--radius-pill`). */
-const RADII = ['card', 'pill'];
+/**
+ * Кастомные радиусы из `@theme`. `sm`/`md`/`lg`/`xl` кита — стоковые имена
+ * шкалы Tailwind и уже известны tailwind-merge; дорегистрировать нужно только
+ * `pill`.
+ */
+const RADII = ['pill'];
 
 /**
  * # tailwind-merge, знающий про токены проекта
