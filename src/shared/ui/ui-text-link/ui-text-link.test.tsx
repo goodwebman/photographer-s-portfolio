@@ -3,9 +3,7 @@
  */
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { cleanup, screen } from '@testing-library/react';
-
-import { renderWithIntl } from '@/shared/lib/testing';
+import { cleanup, render, screen } from '@testing-library/react';
 
 import { UITextLink } from './ui-text-link';
 
@@ -15,14 +13,14 @@ afterEach(() => {
 
 describe('UITextLink', () => {
   it('тон brand по умолчанию', () => {
-    renderWithIntl(<UITextLink href="/portfolio">Все работы</UITextLink>);
+    render(<UITextLink href="#contact">Контакты</UITextLink>);
 
     expect(screen.getByRole('link')).toHaveClass('text-brand-emphasis');
   });
 
   it('тон muted — приглушённая инлайновая ссылка с местом под иконку', () => {
-    renderWithIntl(
-      <UITextLink href="/portfolio" tone="muted">
+    render(
+      <UITextLink href="/" tone="muted">
         Назад
       </UITextLink>,
     );
@@ -33,7 +31,7 @@ describe('UITextLink', () => {
   });
 
   it('внешняя ссылка получает target и rel', () => {
-    renderWithIntl(<UITextLink href="https://example.com">Сайт</UITextLink>);
+    render(<UITextLink href="https://example.com">Сайт</UITextLink>);
 
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('target', '_blank');

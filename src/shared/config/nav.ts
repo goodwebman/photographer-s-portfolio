@@ -1,17 +1,33 @@
-/** Ключ перевода пункта меню (namespace `Nav`). */
-export type NavKey = 'home' | 'about' | 'portfolio' | 'services' | 'contact';
+/**
+ * Якоря секций одностраничника. Значение — `id` секции в DOM: шапка ведёт на
+ * `#<id>`, scroll-spy подсвечивает пункт по нему же.
+ */
+export const SECTION_ID = {
+  top: 'top',
+  about: 'about',
+  portfolio: 'portfolio',
+  services: 'services',
+  contact: 'contact',
+} as const;
 
-/** Пункт навигации. `key` резолвится в подпись через `t('Nav.<key>')`. */
+export type SectionId = (typeof SECTION_ID)[keyof typeof SECTION_ID];
+
+/** Пункт меню: якорь секции + подпись. */
 export interface NavItem {
-  readonly href: string;
-  readonly key: NavKey;
+  readonly id: SectionId;
+  readonly label: string;
 }
 
-/** Пункты главного меню. Подписи — в messages, здесь только маршруты. */
+/**
+ * Пункты меню в порядке секций на странице. «Главной» нет: наверх ведёт
+ * логотип, а отдельный пункт на одностраничнике дублировал бы его.
+ */
 export const NAV: readonly NavItem[] = [
-  { href: '/', key: 'home' },
-  { href: '/about', key: 'about' },
-  { href: '/portfolio', key: 'portfolio' },
-  { href: '/services', key: 'services' },
-  { href: '/contact', key: 'contact' },
+  { id: SECTION_ID.about, label: 'Обо мне' },
+  { id: SECTION_ID.portfolio, label: 'Портфолио' },
+  { id: SECTION_ID.services, label: 'Услуги и цены' },
+  { id: SECTION_ID.contact, label: 'Контакты' },
 ];
+
+/** `#id` для ссылки на секцию. */
+export const sectionHref = (id: SectionId): `#${SectionId}` => `#${id}`;

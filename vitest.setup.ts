@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/vitest';
 
 import { vi } from 'vitest';
 
-// jsdom не реализует matchMedia — нужен для useReducedMotion / темы.
+// jsdom не реализует matchMedia — нужен для reduced-motion проверок.
 if (!window.matchMedia) {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
@@ -19,7 +19,7 @@ if (!window.matchMedia) {
   });
 }
 
-// motion whileInView использует IntersectionObserver, jsdom его не имеет.
+// IntersectionObserver (scroll-spy шапки, revealBoot) в jsdom нет.
 class MockIntersectionObserver {
   observe = vi.fn();
   unobserve = vi.fn();

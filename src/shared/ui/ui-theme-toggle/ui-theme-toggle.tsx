@@ -1,15 +1,11 @@
 'use client';
 
 import type { FC } from 'react';
-import { memo } from 'react';
-
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { LuMoon, LuSun } from 'react-icons/lu';
 
 import type { cnParams } from '@/shared/lib/cn';
-import { useCn } from '@/shared/lib/cn';
-import { useTheme } from '@/shared/theme';
-import { Show } from '@/shared/kit';
+import { cx } from '@/shared/lib/cn/cx';
+import { useTheme } from '@/shared/theme/use-theme';
+import { MoonIcon, SunIcon } from '@/shared/ui/icons/stroke-icons';
 
 /**
  * # Интерфейс пропсов для компонента UIThemeToggle
@@ -26,55 +22,44 @@ export interface IUIThemeToggleProps {
   readonly labelToLight?: string;
 }
 
+const BASE =
+  'relative inline-flex size-10 items-center justify-center overflow-hidden rounded-pill text-muted-foreground outline-none transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background';
+
+const ICON = 'absolute size-[1.125rem] transition-[opacity,rotate,scale] duration-200 ease-out-expo';
+
 /**
- * Переключатель темы: анимированный crossfade + rotate между sun/moon.
- * При `prefers-reduced-motion` иконка меняется без анимации.
+ * Переключатель темы: тихая иконочная кнопка без подложки, crossfade + rotate
+ * между sun/moon. Иконка показывает ТЕКУЩУЮ тему, `aria-label` — действие.
+ *
+ * Обе иконки в разметке, видимую выбирает CSS по `data-theme` на `<html>`
+ * (вариант `dark:`): верная иконка видна ещё до гидратации, анимация — CSS-
+ * transition (гаснет при `prefers-reduced-motion` глобальными стилями).
+ * JS нужен только для клика и `aria-label`.
  *
  * @component
  */
-export const UIThemeToggle: FC<IUIThemeToggleProps> = memo(
-  ({
-    className,
-    dataName,
-    labelToDark = 'Включить тёмную тему',
-    labelToLight = 'Включить светлую тему',
-  }) => {
-    const { theme, toggleTheme } = useTheme();
-    const shouldReduce = useReducedMotion();
-    const isDark = theme === 'dark';
+export const UIThemeToggle: FC<IUIThemeToggleProps> = ({
+  className,
+  dataName,
+  labelToDark = 'Включить тёмную тему',
+  labelToLight = 'Включить светлую тему',
+}) => {
+  const { theme, toggleTheme } = useTheme();
 
-    const classNames = useCn(
-      'relative inline-flex size-10 items-center justify-center overflow-hidden rounded-pill border border-border bg-card text-foreground outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-      className,
-    );
-
-    return (
-      <button
-        type="button"
-        data-name={dataName ? `UIThemeToggle-${dataName}` : 'UIThemeToggle'}
-        className={classNames}
-        onClick={toggleTheme}
-        aria-label={isDark ? labelToLight : labelToDark}
-      >
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.span
-            key={theme}
-            className="inline-flex"
-            initial={shouldReduce ? false : { opacity: 0, rotate: -90, scale: 0.5 }}
-            animate={{ opacity: 1, rotate: 0, scale: 1 }}
-            exit={shouldReduce ? undefined : { opacity: 0, rotate: 90, scale: 0.5 }}
-            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <Show
-              when={isDark}
-              fallback={<LuSun className="size-5" aria-hidden="true" />}
-            >
-              <LuMoon className="size-5" aria-hidden="true" />
-            </Show>
-          </motion.span>
-        </AnimatePresence>
-      </button>
-    );
-  },
-);
-UIThemeToggle.displayName = 'UIThemeToggle';
+  return (
+    <button
+      type="button"
+      data-name={dataName ? `UIThemeToggle-${dataName}` : 'UIThemeToggle'}
+      className={cx(BASE, className)}
+      onClick={toggleTheme}
+      aria-label={theme === 'dark' ? labelToLight : labelToDark}
+    >
+      <MoonIcon
+        className={cx(ICON, 'rotate-90 scale-50 opacity-0 dark:rotate-0 dark:scale-100 dark:opacity-100')}
+      />
+      <SunIcon
+        className={cx(ICON, 'rotate-0 scale-100 opacity-100 dark:-rotate-90 dark:scale-50 dark:opacity-0')}
+      />
+    </button>
+  );
+};

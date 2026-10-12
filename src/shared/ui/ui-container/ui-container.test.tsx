@@ -34,7 +34,7 @@ describe('UIContainer', () => {
     const root = getRoot(container);
     expect(screen.getByText('Контент')).toBeInTheDocument();
     expect(root).toHaveClass('mx-auto');
-    expect(root).toHaveClass('max-w-6xl');
+    expect(root).toHaveClass('max-w-[88rem]');
     expect(root).toHaveClass('pt-10');
   });
 });

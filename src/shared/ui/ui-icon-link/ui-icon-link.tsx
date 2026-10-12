@@ -1,6 +1,7 @@
 import type { FC, ReactNode } from 'react';
 
-import { Link } from '@/shared/i18n';
+import Link from 'next/link';
+
 import { buttonVariants } from '@/shared/kit';
 import { getHrefKind } from '@/shared/lib/href';
 import type { cnParams } from '@/shared/lib/cn';
@@ -12,7 +13,7 @@ export type UIIconLinkVariant = 'outline' | 'ghost' | 'secondary';
 /**
  * # Интерфейс пропсов для компонента UIIconLink
  * @interface IUIIconLinkProps
- * @property {string} href - адрес (маршрут, http(s) или mailto/tel)
+ * @property {string} href - адрес (якорь, маршрут, http(s) или mailto/tel)
  * @property {ReactNode} children - иконка
  * @property {string} label - доступное имя (`aria-label`), обязательно
  * @property {UIIconLinkVariant} [variant] - визуальный вариант

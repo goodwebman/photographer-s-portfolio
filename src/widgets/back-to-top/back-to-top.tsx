@@ -3,18 +3,24 @@
 import type { FC } from 'react';
 import { useCallback } from 'react';
 
-import { useReducedMotion } from 'motion/react';
-import { useTranslations } from 'next-intl';
-import { LuArrowUp } from 'react-icons/lu';
-
-import { useScrolledRatio } from '@/shared/lib/hooks';
-import { UIFab } from '@/shared/ui';
+// Прямые пути, не баррели: клиентский остров не должен тянуть соседние модули.
+import { useScrolledRatio } from '@/shared/lib/hooks/use-scroll-flag';
+import { ArrowUpIcon } from '@/shared/ui/icons/stroke-icons';
+import { UIFab } from '@/shared/ui/ui-fab';
 
 /**
  * Порог скролла (доля прокручиваемой высоты документа) для появления кнопки.
  * 0.2 = 20% — когда пользователь пролистал пятую часть страницы.
  */
 const SCROLL_THRESHOLD = 0.2;
+
+const prefersReducedMotion = (): boolean =>
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+export interface IBackToTopProps {
+  /** Доступное имя кнопки. Приходит с сервера: `COPY` целиком в клиентский бандл не тянем. */
+  readonly label: string;
+}
 
 /**
  * «Наверх» — плавающая кнопка в правом нижнем углу. Появляется после
@@ -23,23 +29,21 @@ const SCROLL_THRESHOLD = 0.2;
  *
  * Виджет держит только поведение — оформление и анимация живут в `UIFab`.
  */
-export const BackToTop: FC = () => {
-  const t = useTranslations('Common');
-  const shouldReduce = useReducedMotion();
+export const BackToTop: FC<IBackToTopProps> = ({ label }) => {
   const visible = useScrolledRatio(SCROLL_THRESHOLD);
 
   const handleClick = useCallback(() => {
-    window.scrollTo({ top: 0, behavior: shouldReduce ? 'instant' : 'smooth' });
-  }, [shouldReduce]);
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'instant' : 'smooth' });
+  }, []);
 
   return (
     <UIFab
       visible={visible}
-      label={t('backToTop')}
+      label={label}
       onClick={handleClick}
       dataName="back-to-top"
     >
-      <LuArrowUp className="size-5 sm:size-5.5" />
+      <ArrowUpIcon className="size-5 sm:size-5.5" />
     </UIFab>
   );
 };

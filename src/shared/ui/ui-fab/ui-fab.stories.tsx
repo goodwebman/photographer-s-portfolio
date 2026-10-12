@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { LuArrowUp } from 'react-icons/lu';
+import { ArrowUpIcon } from '../icons';
 
 import { UIFab } from './ui-fab';
 
@@ -16,7 +16,7 @@ const meta = {
     visible: true,
     label: 'Наверх',
     onClick: () => undefined,
-    children: <LuArrowUp className="size-5 sm:size-5.5" />,
+    children: <ArrowUpIcon className="size-5 sm:size-5.5" />,
   },
   parameters: { layout: 'fullscreen' },
   decorators: [

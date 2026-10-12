@@ -3,9 +3,7 @@
  */
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { cleanup, screen } from '@testing-library/react';
-
-import { renderWithIntl } from '@/shared/lib/testing';
+import { cleanup, render, screen } from '@testing-library/react';
 
 import { UIIconLink } from './ui-icon-link';
 
@@ -15,7 +13,7 @@ afterEach(() => {
 
 describe('UIIconLink', () => {
   it('внешняя иконочная ссылка: имя, target и rel', () => {
-    renderWithIntl(
+    render(
       <UIIconLink href="https://t.me/x" label="Telegram">
         <svg />
       </UIIconLink>,
@@ -27,7 +25,7 @@ describe('UIIconLink', () => {
   });
 
   it('mailto без target', () => {
-    renderWithIntl(
+    render(
       <UIIconLink href="mailto:a@b.c" label="Почта">
         <svg />
       </UIIconLink>,
@@ -38,16 +36,15 @@ describe('UIIconLink', () => {
     );
   });
 
-  it('внутренний маршрут получает префикс локали', () => {
-    renderWithIntl(
-      <UIIconLink href="/contact" label="Контакты">
+  it('якорь секции — обычная ссылка в той же вкладке', () => {
+    render(
+      <UIIconLink href="#top" label="Наверх">
         <svg />
       </UIIconLink>,
     );
 
-    expect(screen.getByRole('link', { name: 'Контакты' })).toHaveAttribute(
-      'href',
-      '/ru/contact',
-    );
+    const link = screen.getByRole('link', { name: 'Наверх' });
+    expect(link).toHaveAttribute('href', '#top');
+    expect(link).not.toHaveAttribute('target');
   });
 });

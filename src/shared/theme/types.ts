@@ -1,7 +1,7 @@
 /** Доступные темы оформления. */
 export type Theme = 'light' | 'dark';
 
-/** Значение контекста темы. */
+/** Значение хука темы. */
 export interface IThemeContextValue {
   /** Текущая тема. */
   readonly theme: Theme;
@@ -11,5 +11,8 @@ export interface IThemeContextValue {
   readonly toggleTheme: () => void;
 }
 
-/** Ключ хранения выбранной темы в localStorage. */
+/** Имя cookie с выбранной темой (читает inline-скрипт в `<head>`). */
 export const THEME_STORAGE_KEY = 'theme';
+
+/** Тема по умолчанию — «Ночь»: большая часть кадров Полины ночные. */
+export const DEFAULT_THEME: Theme = 'dark';

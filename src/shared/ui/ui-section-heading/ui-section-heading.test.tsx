@@ -12,36 +12,37 @@ afterEach(() => {
 });
 
 describe('UISectionHeading', () => {
-  it('рендерит title как h2', () => {
-    render(<UISectionHeading title="Проекты" />);
-    const heading = screen.getByRole('heading', { level: 2, name: 'Проекты' });
-    expect(heading).toBeInTheDocument();
+  it('рендерит title как h2 с переданным id', () => {
+    render(<UISectionHeading id="portfolio-title" title="Мои работы" />);
+
+    const heading = screen.getByRole('heading', { level: 2, name: 'Мои работы' });
+    expect(heading).toHaveAttribute('id', 'portfolio-title');
   });
 
-  it('eyebrow рендерится, когда передан', () => {
-    render(<UISectionHeading title="T" eyebrow="Кейсы" />);
-    expect(screen.getByText('Кейсы')).toBeInTheDocument();
+  it('eyebrow и номер секции рендерятся, когда переданы', () => {
+    render(<UISectionHeading title="T" eyebrow="Портфолио" index="02" />);
+
+    expect(screen.getByText('Портфолио')).toBeInTheDocument();
+    expect(screen.getByText('02')).toBeInTheDocument();
   });
 
-  it('eyebrow отсутствует, когда не передан', () => {
-    render(<UISectionHeading title="T" />);
-    expect(screen.queryByText('Кейсы')).toBeNull();
+  it('без eyebrow нет ни надзаголовка, ни номера', () => {
+    render(<UISectionHeading title="T" index="02" />);
+
+    expect(screen.queryByText('02')).toBeNull();
   });
 
-  it('description рендерится, когда передан', () => {
-    render(<UISectionHeading title="T" description="Описание секции" />);
+  it('description рендерится, только когда передан', () => {
+    const { container, rerender } = render(<UISectionHeading title="T" />);
+    expect(container.querySelectorAll('p')).toHaveLength(0);
+
+    rerender(<UISectionHeading title="T" description="Описание секции" />);
     expect(screen.getByText('Описание секции')).toBeInTheDocument();
   });
 
-  it('description отсутствует, когда не передан', () => {
-    const { container } = render(<UISectionHeading title="T" />);
-    expect(container.querySelectorAll('p')).toHaveLength(0);
-  });
-
   it('action рендерится', () => {
-    render(
-      <UISectionHeading title="T" action={<a href="https://example.com">Все</a>} />,
-    );
-    expect(screen.getByRole('link', { name: 'Все' })).toBeInTheDocument();
+    render(<UISectionHeading title="T" action={<a href="#contact">Записаться</a>} />);
+
+    expect(screen.getByRole('link', { name: 'Записаться' })).toBeInTheDocument();
   });
 });

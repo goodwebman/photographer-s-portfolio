@@ -12,6 +12,7 @@ import { extendTailwindMerge } from 'tailwind-merge';
 const FONT_SIZES = [
   'hero',
   'display',
+  'title',
   'h1',
   'h2',
   'h3',

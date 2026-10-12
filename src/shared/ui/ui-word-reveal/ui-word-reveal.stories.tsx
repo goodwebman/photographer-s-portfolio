@@ -3,20 +3,23 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { UIWordReveal } from './ui-word-reveal';
 
 /**
- * `UIWordReveal` — заголовок, который проявляется по словам (blur → в фокус,
- * снизу вверх). При `prefers-reduced-motion` рендерится статичный текст.
+ * `UIWordReveal` — заголовок, который проявляется по словам или буквам
+ * (blur → в фокус, снизу вверх). При `prefers-reduced-motion` рендерится
+ * статичный текст.
  */
 const meta = {
   component: UIWordReveal,
   tags: ['autodocs'],
   title: 'Site/UIWordReveal',
   args: {
-    text: 'Данил Шебалов',
-    as: 'h1',
-    className: 'text-h1 font-extrabold tracking-tight text-foreground',
+    text: 'Жду вас в кадре',
+    as: 'h2',
+    split: 'word',
+    className: 'font-serif text-title text-foreground',
   },
   argTypes: {
     as: { control: 'inline-radio', options: ['h1', 'h2'] },
+    split: { control: 'inline-radio', options: ['word', 'char'] },
   },
 } satisfies Meta<typeof UIWordReveal>;
 
@@ -24,14 +27,14 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Heading: Story = {};
+export const ByWord: Story = {};
 
-/** Подзаголовок с задержкой — каскад после основного заголовка. */
-export const Subheading: Story = {
+/** Имя в hero: одно длинное слово — каскад по буквам. */
+export const ByChar: Story = {
   args: {
-    as: 'h2',
-    text: 'Коротко обо мне',
-    className: 'text-h2 font-bold text-foreground',
-    delay: 0.1,
+    as: 'h1',
+    text: 'Аполлинария',
+    split: 'char',
+    className: 'whitespace-nowrap font-serif text-hero uppercase text-foreground',
   },
 };

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { SiInstagram, SiTelegram } from 'react-icons/si';
+import { InstagramIcon, TelegramIcon } from '../icons';
 
 import { UIIconLink } from './ui-icon-link';
 
@@ -11,7 +11,7 @@ const meta = {
   args: {
     href: 'https://t.me/qaulina',
     label: 'Telegram',
-    children: <SiTelegram className="size-4.5" />,
+    children: <TelegramIcon className="size-4.5" />,
     variant: 'outline',
   },
   argTypes: {
@@ -30,6 +30,6 @@ export const Ghost: Story = {
     variant: 'ghost',
     href: 'https://www.instagram.com/apollinaria.frame/',
     label: 'Instagram',
-    children: <SiInstagram className="size-4.5" />,
+    children: <InstagramIcon className="size-4.5" />,
   },
 };

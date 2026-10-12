@@ -1,10 +1,7 @@
-'use client';
-
 import type { FC, ReactNode } from 'react';
-import { memo } from 'react';
 
 import type { cnParams } from '@/shared/lib/cn';
-import { useCn } from '@/shared/lib/cn';
+import { cn } from '@/shared/lib/cn';
 
 /**
  * # Интерфейс пропсов для компонента UIContainer
@@ -21,6 +18,7 @@ export interface IUIContainerProps {
 
 /**
  * Центрированный контейнер с боковыми отступами и максимальной шириной.
+ * Server component: в клиентский бандл не попадает.
  *
  * @component
  * @example
@@ -28,21 +26,11 @@ export interface IUIContainerProps {
  * <UIContainer><Section/></UIContainer>
  * ```
  */
-export const UIContainer: FC<IUIContainerProps> = memo(
-  ({ children, className, dataName }) => {
-    const classNames = useCn(
-      'mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8',
-      className,
-    );
-
-    return (
-      <div
-        data-name={dataName ? `UIContainer-${dataName}` : 'UIContainer'}
-        className={classNames}
-      >
-        {children}
-      </div>
-    );
-  },
+export const UIContainer: FC<IUIContainerProps> = ({ children, className, dataName }) => (
+  <div
+    data-name={dataName ? `UIContainer-${dataName}` : 'UIContainer'}
+    className={cn('mx-auto w-full max-w-[88rem] px-5 sm:px-8 lg:px-12', className)}
+  >
+    {children}
+  </div>
 );
-UIContainer.displayName = 'UIContainer';

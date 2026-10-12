@@ -1,14 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <rect width="32" height="32" rx="8" fill="#8b7bff" />
-  <g
-    fill="none"
-    stroke="#0a0a0b"
-    stroke-width="2.4"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  >
-    <path d="M12 11 8 16l4 5" />
-    <path d="M18 10l-4 12" />
-    <path d="M20 11l4 5-4 5" />
-  </g>
+  <rect width="32" height="32" fill="#100f0d" />
+  <text
+    x="15"
+    y="23"
+    text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-style="italic"
+    font-size="22"
+    fill="#eee7db"
+  >a</text>
+  <circle cx="24.5" cy="21.5" r="2" fill="#d9895c" />
 </svg>

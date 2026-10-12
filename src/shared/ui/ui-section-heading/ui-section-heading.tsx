@@ -2,65 +2,73 @@ import type { FC, ReactNode } from 'react';
 
 import type { cnParams } from '@/shared/lib/cn';
 import { cn } from '@/shared/lib/cn';
-import { Show } from '@/shared/kit';
 import { UIReveal } from '@/shared/ui/ui-reveal';
 
 /**
  * # Интерфейс пропсов для компонента UISectionHeading
  * @interface IUISectionHeadingProps
+ * @property {string} title - заголовок секции (serif)
+ * @property {string} [id] - id заголовка — для `aria-labelledby` секции
+ * @property {string} [index] - порядковый номер секции («01»), пишется перед eyebrow
+ * @property {string} [eyebrow] - надзаголовок капсом
+ * @property {ReactNode} [description] - подводка под заголовком
+ * @property {ReactNode} [action] - элемент справа от заголовка (фильтр, ссылка)
+ * @property {cnParams | string} [className] - доп. классы
  */
 export interface IUISectionHeadingProps {
+  readonly title: ReactNode;
+  readonly id?: string;
+  readonly index?: string;
   readonly eyebrow?: string;
-  readonly title: string;
-  readonly description?: string;
-  readonly align?: 'left' | 'center';
-  /** Доп. действие справа (напр. ссылка «все»). */
+  readonly description?: ReactNode;
   readonly action?: ReactNode;
   readonly className?: cnParams | string;
 }
 
 /**
- * Заголовок секции: eyebrow + title + описание (+ опц. действие). Server-safe
- * (без хуков/react-icons), ревил через client-лист UIReveal.
+ * Заголовок секции в редакционной манере: «01 — ОБО МНЕ» волосяной линией,
+ * крупный serif-заголовок, подводка, опц. действие справа. Server component,
+ * ревил — `UIReveal` на CSS.
+ *
+ * @component
  */
 export const UISectionHeading: FC<IUISectionHeadingProps> = ({
-  eyebrow,
   title,
+  id,
+  index,
+  eyebrow,
   description,
-  align = 'left',
   action,
   className,
 }) => (
   <UIReveal
-    className={cn('flex flex-col gap-3', align === 'center' && 'items-center', className)}
+    className={cn(
+      'flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between',
+      className,
+    )}
   >
-    <div
-      className={cn(
-        'flex w-full flex-wrap items-end justify-between gap-4',
-        align === 'center' && 'justify-center',
-      )}
-    >
-      <div className={align === 'center' ? 'text-center' : undefined}>
-        <Show when={Boolean(eyebrow)}>
-          <p className="text-caption font-semibold uppercase tracking-wider text-brand-emphasis">
-            {eyebrow}
-          </p>
-        </Show>
-        <h2 className="mt-2 text-balance text-h2 font-bold text-foreground">
-          {title}
-        </h2>
-      </div>
-      {action}
-    </div>
-    <Show when={Boolean(description)}>
-      <p
-        className={cn(
-          'max-w-2xl text-body text-muted-foreground',
-          align === 'center' && 'text-center',
-        )}
+    <div className="max-w-3xl">
+      {eyebrow ? (
+        <p className="flex items-center gap-3 text-eyebrow uppercase text-muted-foreground">
+          {index ? (
+            <span className="font-serif text-small normal-case tracking-normal text-brand-emphasis lining-nums">
+              {index}
+            </span>
+          ) : null}
+          <span aria-hidden="true" className="h-px w-8 bg-border" />
+          {eyebrow}
+        </p>
+      ) : null}
+      <h2
+        id={id}
+        className="mt-5 text-balance font-serif text-title font-normal text-foreground"
       >
-        {description}
-      </p>
-    </Show>
+        {title}
+      </h2>
+      {description ? (
+        <p className="mt-5 max-w-xl text-body text-muted-foreground">{description}</p>
+      ) : null}
+    </div>
+    {action}
   </UIReveal>
 );

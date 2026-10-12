@@ -1,48 +1,34 @@
-'use client';
-
 import type { FC, MouseEventHandler } from 'react';
 
-import { Link } from '@/shared/i18n';
 import type { cnParams } from '@/shared/lib/cn';
 import { cn } from '@/shared/lib/cn';
 
 /**
- * Вариант логотипа:
- * - `header` — круглый знак со свечением, подпись скрыта до `sm`
- * - `footer` — скруглённый квадрат, подпись видна всегда
+ * Размер логотипа:
+ * - `header` — компактный, в строку шапки
+ * - `footer` — крупнее, якорь подвала
  */
 export type UILogoVariant = 'header' | 'footer';
 
-const ROOT_CLASSES: Record<UILogoVariant, string> = {
-  header:
-    'group flex items-center gap-2 rounded-full pl-1 pr-2 font-semibold outline-none focus-visible:ring-2 focus-visible:ring-ring',
-  footer: 'flex items-center gap-2 font-semibold',
-};
-
-const MARK_CLASSES: Record<UILogoVariant, string> = {
-  header:
-    'grid size-9 place-items-center rounded-full bg-accent font-mono text-accent-foreground shadow-[0_0_20px_-4px_var(--accent)] transition-transform duration-300 group-hover:scale-105',
-  footer:
-    'grid size-8 place-items-center rounded-lg bg-accent font-mono text-accent-foreground',
-};
-
-const NAME_CLASSES: Record<UILogoVariant, string | undefined> = {
-  header: 'hidden pr-1 sm:inline',
-  footer: undefined,
+const SIZE_CLASSES: Record<UILogoVariant, string> = {
+  header: 'text-[1.375rem]',
+  footer: 'text-h2',
 };
 
 /**
  * # Интерфейс пропсов для компонента UILogo
  * @interface IUILogoProps
- * @property {string} name - имя/бренд рядом со знаком
- * @property {UILogoVariant} [variant] - вариант оформления
- * @property {string} [href] - куда ведёт логотип
+ * @property {string} name - бренд; точка в имени (`studio.frame`) выделяется акцентом
+ * @property {string} [label] - доступное имя ссылки, если сам бренд его не объясняет
+ * @property {UILogoVariant} [variant] - размер
+ * @property {string} [href] - куда ведёт логотип (по умолчанию — к началу страницы)
  * @property {MouseEventHandler<HTMLAnchorElement>} [onClick] - обработчик клика
  * @property {cnParams | string} [className] - доп. классы
  * @property {string} [dataName] - суффикс для `data-name`
  */
 export interface IUILogoProps {
   readonly name: string;
+  readonly label?: string;
   readonly variant?: UILogoVariant;
   readonly href?: string;
   readonly onClick?: MouseEventHandler<HTMLAnchorElement>;
@@ -51,28 +37,42 @@ export interface IUILogoProps {
 }
 
 /**
- * Логотип-ссылка: знак `</>` акцентом и имя рядом. Единая точка правды для
- * шапки и подвала — знак не расползается по вёрстке виджетов.
+ * Словесный знак: serif-курсив; точка в имени бренда — акцентом
+ * (`studio` **.** `frame`). Ссылка ведёт к началу страницы. Server-safe.
  *
  * @component
  */
 export const UILogo: FC<IUILogoProps> = ({
   name,
+  label,
   variant = 'header',
-  href = '/',
+  href = '#top',
   onClick,
   className,
   dataName,
-}) => (
-  <Link
-    href={href}
-    onClick={onClick}
-    data-name={dataName ? `UILogo-${dataName}` : 'UILogo'}
-    className={cn(ROOT_CLASSES[variant], className)}
-  >
-    <span aria-hidden="true" className={MARK_CLASSES[variant]}>
-      &lt;/&gt;
-    </span>
-    <span className={NAME_CLASSES[variant]}>{name}</span>
-  </Link>
-);
+}) => {
+  const dot = name.indexOf('.');
+  const [head, tail] = dot === -1 ? [name, ''] : [name.slice(0, dot), name.slice(dot + 1)];
+
+  return (
+    <a
+      href={href}
+      onClick={onClick}
+      aria-label={label}
+      data-name={dataName ? `UILogo-${dataName}` : 'UILogo'}
+      className={cn(
+        'inline-flex items-baseline font-serif italic leading-none tracking-tight text-foreground outline-none transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background',
+        SIZE_CLASSES[variant],
+        className,
+      )}
+    >
+      {head}
+      {tail ? (
+        <>
+          <span className="not-italic text-brand-emphasis">.</span>
+          {tail}
+        </>
+      ) : null}
+    </a>
+  );
+};

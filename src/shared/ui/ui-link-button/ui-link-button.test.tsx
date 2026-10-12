@@ -3,9 +3,7 @@
  */
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { cleanup, screen } from '@testing-library/react';
-
-import { renderWithIntl } from '@/shared/lib/testing';
+import { cleanup, render, screen } from '@testing-library/react';
 
 import { UILinkButton } from './ui-link-button';
 
@@ -14,16 +12,24 @@ afterEach(() => {
 });
 
 describe('UILinkButton', () => {
-  it('внутренний маршрут — locale-aware ссылка с префиксом локали', () => {
-    renderWithIntl(<UILinkButton href="/portfolio">Портфолио</UILinkButton>);
+  it('якорь секции — ссылка в той же вкладке без префиксов', () => {
+    render(<UILinkButton href="#portfolio">Смотреть работы</UILinkButton>);
 
-    const link = screen.getByRole('link', { name: 'Портфолио' });
-    expect(link).toHaveAttribute('href', '/ru/portfolio');
+    const link = screen.getByRole('link', { name: 'Смотреть работы' });
+    expect(link).toHaveAttribute('href', '#portfolio');
+    expect(link).not.toHaveAttribute('target');
+  });
+
+  it('внутренний маршрут — next/link без target', () => {
+    render(<UILinkButton href="/">На главную</UILinkButton>);
+
+    const link = screen.getByRole('link', { name: 'На главную' });
+    expect(link).toHaveAttribute('href', '/');
     expect(link).not.toHaveAttribute('target');
   });
 
   it('внешняя ссылка открывается в новой вкладке и защищена rel', () => {
-    renderWithIntl(<UILinkButton href="https://t.me/x">Telegram</UILinkButton>);
+    render(<UILinkButton href="https://t.me/x">Telegram</UILinkButton>);
 
     const link = screen.getByRole('link', { name: 'Telegram' });
     expect(link).toHaveAttribute('href', 'https://t.me/x');
@@ -32,7 +38,7 @@ describe('UILinkButton', () => {
   });
 
   it('mailto остаётся в текущей вкладке', () => {
-    renderWithIntl(<UILinkButton href="mailto:a@b.c">Написать</UILinkButton>);
+    render(<UILinkButton href="mailto:a@b.c">Написать</UILinkButton>);
 
     const link = screen.getByRole('link', { name: 'Написать' });
     expect(link).toHaveAttribute('href', 'mailto:a@b.c');
@@ -40,7 +46,7 @@ describe('UILinkButton', () => {
   });
 
   it('вариант и размер дают те же классы, что у UIButton кита', () => {
-    renderWithIntl(
+    render(
       <UILinkButton href="/" variant="outline" size="lg" className="mt-8">
         Домой
       </UILinkButton>,
@@ -53,7 +59,7 @@ describe('UILinkButton', () => {
   });
 
   it('fullWidth растягивает ссылку на всю ширину', () => {
-    renderWithIntl(
+    render(
       <UILinkButton href="/" fullWidth>
         Домой
       </UILinkButton>,
@@ -63,7 +69,7 @@ describe('UILinkButton', () => {
   });
 
   it('data-name по умолчанию и с суффиксом', () => {
-    const { container } = renderWithIntl(
+    const { container } = render(
       <UILinkButton href="/" dataName="cta">
         Домой
       </UILinkButton>,

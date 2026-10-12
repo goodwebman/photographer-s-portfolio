@@ -18,7 +18,7 @@ export const TOKEN_GROUPS: readonly {
 }[] = [
   {
     title: 'Поверхности',
-    tokens: ['background', 'card', 'popover', 'muted', 'paper', 'accent'],
+    tokens: ['background', 'card', 'popover', 'muted', 'surface', 'accent'],
   },
   {
     title: 'Текст',
@@ -41,13 +41,13 @@ export const CONTRAST_PAIRS: readonly (readonly [string, string])[] = [
   ['muted-foreground', 'background'],
   ['muted-foreground', 'card'],
   ['muted-foreground', 'muted'],
-  ['muted-foreground', 'paper'],
+  ['muted-foreground', 'surface'],
   ['primary-foreground', 'primary'],
   ['brand-foreground', 'brand'],
   ['brand-emphasis', 'background'],
   ['brand-emphasis', 'card'],
   ['brand-emphasis', 'muted'],
-  ['brand-emphasis', 'paper'],
+  ['brand-emphasis', 'surface'],
 ];
 
 const parseHex = (value: string): readonly [number, number, number] | null => {

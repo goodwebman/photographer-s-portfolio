@@ -1,6 +1,7 @@
 import type { FC, ReactNode } from 'react';
 
-import { Link } from '@/shared/i18n';
+import Link from 'next/link';
+
 import { getHrefKind } from '@/shared/lib/href';
 import type { cnParams } from '@/shared/lib/cn';
 import { cn } from '@/shared/lib/cn';
@@ -21,7 +22,7 @@ const TONE_CLASSES: Record<UITextLinkTone, string> = {
 /**
  * # Интерфейс пропсов для компонента UITextLink
  * @interface IUITextLinkProps
- * @property {string} href - адрес (маршрут, http(s) или mailto/tel)
+ * @property {string} href - адрес (якорь, маршрут, http(s) или mailto/tel)
  * @property {ReactNode} children - содержимое
  * @property {UITextLinkTone} [tone] - визуальный тон
  * @property {cnParams | string} [className] - доп. классы
@@ -36,7 +37,7 @@ export interface IUITextLinkProps {
 }
 
 /**
- * Инлайновая текстовая ссылка (навигационные «все проекты →», «назад к списку»).
+ * Инлайновая текстовая ссылка («Instagram*», «на главную»).
  * Элемент выбирается по `href`, как в {@link UILinkButton}. Server-safe.
  *
  * @component

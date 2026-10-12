@@ -1,8 +1,9 @@
 import type { FC, ReactNode } from 'react';
 
+import Link from 'next/link';
+
 import type { VariantProps } from 'class-variance-authority';
 
-import { Link } from '@/shared/i18n';
 import { buttonVariants } from '@/shared/kit';
 import { getHrefKind } from '@/shared/lib/href';
 import type { cnParams } from '@/shared/lib/cn';
@@ -18,7 +19,7 @@ export type UILinkButtonSize = NonNullable<ButtonVariantProps['size']>;
 /**
  * # Интерфейс пропсов для компонента UILinkButton
  * @interface IUILinkButtonProps
- * @property {string} href - адрес: маршрут приложения, http(s) или mailto/tel
+ * @property {string} href - адрес: якорь, маршрут приложения, http(s) или mailto/tel
  * @property {ReactNode} children - содержимое
  * @property {UILinkButtonVariant} [variant] - визуальный вариант (как у `UIButton`)
  * @property {UILinkButtonSize} [size] - размер (как у `UIButton`)
@@ -43,14 +44,14 @@ export interface IUILinkButtonProps {
  *
  * Классы берутся из `buttonVariants` кита (модуль без `'use client'`), поэтому
  * компонент server-safe и используется прямо в RSC. Элемент выбирается по
- * `href` ({@link getHrefKind}): маршрут приложения — locale-aware `<Link>`,
- * http(s) — `<a target="_blank" rel="noopener noreferrer">`, `mailto:`/`tel:` —
- * обычный `<a>`.
+ * `href` ({@link getHrefKind}): маршрут приложения — `next/link`, http(s) —
+ * `<a target="_blank" rel="noopener noreferrer">`, якорь секции и
+ * `mailto:`/`tel:` — обычный `<a>`.
  *
  * @component
  * @example
  * ```tsx
- * <UILinkButton href="/portfolio" variant="primary" size="lg">Смотреть работы</UILinkButton>
+ * <UILinkButton href="#portfolio" variant="primary" size="lg">Смотреть работы</UILinkButton>
  * ```
  */
 export const UILinkButton: FC<IUILinkButtonProps> = ({

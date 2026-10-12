@@ -1,11 +1,7 @@
-'use client';
-
 import type { FC, ReactNode } from 'react';
 
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-
 import type { cnParams } from '@/shared/lib/cn';
-import { cn } from '@/shared/lib/cn';
+import { cx } from '@/shared/lib/cn/cx';
 
 /**
  * # Интерфейс пропсов для компонента UIFab
@@ -14,7 +10,7 @@ import { cn } from '@/shared/lib/cn';
  * @property {string} label - доступное имя (`aria-label`)
  * @property {() => void} onClick - обработчик клика
  * @property {ReactNode} children - иконка
- * @property {cnParams | string} [className] - доп. классы
+ * @property {cnParams | string} [className] - доп. классы обёртки
  * @property {string} [dataName] - суффикс для `data-name`
  */
 export interface IUIFabProps {
@@ -26,14 +22,15 @@ export interface IUIFabProps {
   readonly dataName?: string;
 }
 
-const EASE = [0.16, 1, 0.3, 1] as const;
-
 /**
  * Плавающая круглая кнопка в правом нижнем углу вьюпорта (floating action
- * button): стекло с блюром, появление/уход пружинкой, hover- и tap-отклик.
+ * button): полупрозрачный фон с блюром, появление/уход, hover- и tap-отклик.
  *
- * Состояние видимости приходит снаружи — компонент отвечает только за
- * оформление и анимацию, а не за то, когда показываться.
+ * Анимации — CSS-transition, без JS-рантайма: кнопка всегда в DOM, скрытая —
+ * прозрачная, уменьшенная и `inert` (не фокусируется, не кликается, не видна
+ * скринридеру). Состояние видимости приходит снаружи — компонент отвечает
+ * только за оформление. Классы склеиваются `cx` (без `tailwind-merge`):
+ * компонент живёт в клиентском острове `BackToTop`.
  *
  * @component
  */
@@ -44,35 +41,23 @@ export const UIFab: FC<IUIFabProps> = ({
   children,
   className,
   dataName,
-}) => {
-  const shouldReduce = useReducedMotion();
-
-  return (
-    <AnimatePresence mode="wait">
-      {/* Прямой тернарник, а не <Show>: AnimatePresence отслеживает появление/
-          удаление своих ПРЯМЫХ детей. Обёртка-компонент между ними скрыла бы
-          размонтирование и убила бы анимацию ухода. */}
-      {visible ? (
-        <motion.button
-          key="ui-fab"
-          type="button"
-          aria-label={label}
-          data-name={dataName ? `UIFab-${dataName}` : 'UIFab'}
-          initial={{ opacity: 0, scale: 0.6, y: 16 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={shouldReduce ? undefined : { opacity: 0, scale: 0.6, y: 16 }}
-          transition={{ duration: 0.28, ease: EASE }}
-          whileHover={shouldReduce ? undefined : { scale: 1.1 }}
-          whileTap={shouldReduce ? undefined : { scale: 0.95 }}
-          onClick={onClick}
-          className={cn(
-            'fixed bottom-6 right-6 z-40 grid size-11 cursor-pointer place-items-center rounded-full border border-border bg-card text-muted-foreground shadow-[0_8px_30px_-8px_rgba(0,0,0,0.35)] ring-1 ring-inset ring-white/4 backdrop-blur-xl outline-none transition-colors duration-200 hover:border-accent/40 hover:text-accent focus-visible:ring-2 focus-visible:ring-ring sm:bottom-8 sm:right-8 sm:size-12',
-            className,
-          )}
-        >
-          {children}
-        </motion.button>
-      ) : null}
-    </AnimatePresence>
-  );
-};
+}) => (
+  <div
+    data-name={dataName ? `UIFab-${dataName}` : 'UIFab'}
+    inert={!visible}
+    className={cx(
+      'fixed bottom-5 right-5 z-40 transition-[opacity,translate,scale] duration-300 ease-out-expo sm:bottom-8 sm:right-8',
+      visible ? 'opacity-100' : 'pointer-events-none translate-y-4 scale-60 opacity-0',
+      className,
+    )}
+  >
+    <button
+      type="button"
+      aria-label={label}
+      onClick={onClick}
+      className="grid size-11 cursor-pointer place-items-center rounded-full border border-border bg-background/80 text-muted-foreground shadow-[0_10px_30px_-12px_rgba(0,0,0,0.45)] backdrop-blur-md outline-none transition-[color,border-color,scale] duration-200 ease-out-expo hover:border-brand-emphasis/50 hover:text-brand-emphasis focus-visible:ring-2 focus-visible:ring-ring motion-safe:hover:scale-110 motion-safe:active:scale-95 sm:size-12"
+    >
+      {children}
+    </button>
+  </div>
+);

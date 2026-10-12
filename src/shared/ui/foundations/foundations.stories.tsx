@@ -10,7 +10,6 @@ import {
   UIButton,
   UICard,
   UISeparator,
-  UIStat,
   UITabs,
 } from '@/shared/kit';
 
@@ -19,7 +18,8 @@ import { PaletteBoard, ThemesSideBySide, TypeRow } from './foundations-parts';
 /**
  * # Foundations
  *
- * Дизайн-система «День / Ночь»: токены палитры (имена совпадают с UI-китом),
+ * Дизайн-система «День / Ночь»: тёплый графит, костяной белый и терракота.
+ * Токены палитры (имена совпадают с UI-китом),
  * гарнитуры и шкала, и то, как в новой палитре выглядят компоненты кита.
  * Палитра и превью кита показывают обе темы рядом — тулбар темы на них не влияет.
  */
@@ -43,11 +43,16 @@ export const Palette: Story = {
 export const Typography: Story = {
   render: () => (
     <div className="bg-background p-6 text-foreground sm:p-10">
-      <TypeRow token="text-hero" spec="serif · clamp(2.25rem, 11.5vw, 11rem) · lh 0.9 · ls -0.02em">
+      <TypeRow token="text-hero" spec="serif · clamp(2.25rem, 11.5vw, 10.5rem) · lh 0.9 · ls -0.02em">
         <p className="whitespace-nowrap font-serif text-hero">АПОЛЛИНАРИЯ</p>
       </TypeRow>
       <TypeRow token="text-display" spec="serif · clamp(2.5rem, 7vw, 6rem) · lh 1">
-        <p className="font-serif text-display">ФОТОГРАФ</p>
+        <p className="font-serif text-display">
+          Жду вас <em className="italic text-brand-emphasis">в кадре</em>
+        </p>
+      </TypeRow>
+      <TypeRow token="text-title" spec="serif · clamp(2.25rem, 5.5vw, 4.75rem) · заголовки секций">
+        <p className="font-serif text-title">Мои работы</p>
       </TypeRow>
       <TypeRow token="text-h1" spec="serif · clamp(2rem, 4vw, 3rem)">
         <p className="font-serif text-h1">Хотите поработать вместе?</p>
@@ -111,7 +116,7 @@ const KitPreview: FC = () => {
           <UITabs.List className="self-start">
             {[
               ['all', 'Все'],
-              ['street', 'Стрит'],
+              ['city', 'Ночной город'],
               ['portrait', 'Портрет'],
               ['love-story', 'Love story'],
               ['kids', 'Детская'],
@@ -157,28 +162,10 @@ const KitPreview: FC = () => {
               <li>Помощь с образом</li>
             </ul>
             <p className="mt-6 font-serif text-h3 lining-nums">3 000 ₽ / час</p>
-            <p className="text-caption text-muted-foreground">каждый следующий час +500 ₽</p>
+            <p className="text-caption text-muted-foreground">каждый следующий час — 500 ₽</p>
           </UICard.Content>
         </UICard>
         <UIAlert className="max-w-sm">Студия оплачивается отдельно.</UIAlert>
-      </div>
-
-      <div className="flex flex-col gap-4">
-        <h3 className="text-eyebrow uppercase text-muted-foreground">
-          UIStat на красном блоке — токены переопределены на обёртке
-        </h3>
-        <div className="grid grid-cols-2 gap-3 bg-brand p-4 text-brand-foreground [--border:color-mix(in_srgb,var(--brand-foreground)_40%,transparent)] [--card-foreground:var(--brand-foreground)] [--card:transparent] [--muted-foreground:var(--brand-foreground)]">
-          <UIStat
-            label="фото в авторской ретуши"
-            value={<span className="font-serif font-normal lining-nums">10</span>}
-            className="rounded-none shadow-none"
-          />
-          <UIStat
-            label="до готовности"
-            value={<span className="font-serif font-normal lining-nums">5 дней</span>}
-            className="rounded-none shadow-none"
-          />
-        </div>
       </div>
 
       <UISeparator />

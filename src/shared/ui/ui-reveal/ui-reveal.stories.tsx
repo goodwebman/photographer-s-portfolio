@@ -3,8 +3,9 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { UIReveal } from './ui-reveal';
 
 /**
- * `UIReveal` — обёртка scroll-reveal: плавное появление при въезде в вьюпорт.
- * При `prefers-reduced-motion` рендерит статичный `<div>` без анимации.
+ * `UIReveal` — обёртка scroll-reveal: плавное появление при въезде во вьюпорт.
+ * Анимация — CSS, старт — `revealBoot` (запущен в `.storybook/preview.tsx`).
+ * При `prefers-reduced-motion` и без JS содержимое видно сразу.
  */
 const meta = {
   component: UIReveal,
@@ -14,7 +15,6 @@ const meta = {
     delay: 0,
     y: 24,
     scale: 1,
-    once: true,
     children: (
       <div className="rounded-card border border-border bg-card p-6 text-center text-body text-card-foreground">
         Появляюсь при попадании в вьюпорт
@@ -36,7 +36,7 @@ export const WithDelay: Story = {
   args: { delay: 0.4 },
 };
 
-/** Со `scale` — появление с лёгким pop-in (spring), как у карточек проектов. */
+/** Со `scale` — появление с лёгким pop-in. */
 export const WithScale: Story = {
   args: { scale: 0.94 },
 };

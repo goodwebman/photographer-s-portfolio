@@ -1,12 +1,13 @@
 import type { ReactNode } from 'react';
 
-import { SiInstagram, SiTelegram } from 'react-icons/si';
+import { InstagramIcon, TelegramIcon } from '@/shared/ui/icons';
 
 import { SITE } from './site';
 
-/** Соц-ссылка/контакт. Подпись резолвится через `t('Socials.<id>')`. */
+/** Канал связи. */
 export interface Social {
   readonly id: 'telegram' | 'instagram';
+  readonly label: string;
   readonly href: string;
   /** Ник для отображения (`@qaulina`). */
   readonly handle: string;
@@ -19,22 +20,24 @@ export interface Social {
 }
 
 /**
- * Контакты и соц-сети. Импортируются только в клиентских компонентах: иконки
- * `react-icons` ломаются при передаче через RSC-границу (см. README).
+ * Контакты и соц-сети. Иконки — server-safe SVG из `@/shared/ui/icons`,
+ * поэтому `SOCIALS` можно рендерить и в серверных компонентах.
  */
 export const SOCIALS: readonly Social[] = [
   {
     id: 'telegram',
+    label: 'Telegram',
     href: SITE.telegram,
     handle: SITE.telegramHandle,
-    icon: <SiTelegram />,
+    icon: <TelegramIcon />,
     metaDisclaimer: false,
   },
   {
     id: 'instagram',
+    label: 'Instagram*',
     href: SITE.instagram,
     handle: SITE.instagramHandle,
-    icon: <SiInstagram />,
+    icon: <InstagramIcon />,
     metaDisclaimer: true,
   },
 ];

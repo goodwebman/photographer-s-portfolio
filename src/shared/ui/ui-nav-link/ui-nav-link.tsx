@@ -1,53 +1,40 @@
-'use client';
-
 import type { FC, MouseEventHandler, ReactNode } from 'react';
 
-import { motion } from 'motion/react';
-
-import { Link } from '@/shared/i18n';
 import type { cnParams } from '@/shared/lib/cn';
 import { cn } from '@/shared/lib/cn';
-import { Show } from '@/shared/kit';
 
 /**
- * Вариант навигационной ссылки:
- * - `pill` — горизонтальное меню-остров, активный пункт подсвечен «таблеткой»
- * - `drawer` — вертикальное мобильное меню
- * - `footer` — компактный список разделов в подвале
+ * Вариант пункта навигации:
+ * - `header` — строка шапки: мелкий капс с разрядкой, активный — акцентная риска снизу
+ * - `menu` — полноэкранное мобильное меню: крупный serif с номером
+ * - `footer` — компактный список в подвале
  */
-export type UINavLinkVariant = 'pill' | 'drawer' | 'footer';
+export type UINavLinkVariant = 'header' | 'menu' | 'footer';
 
-const EASE = [0.16, 1, 0.3, 1] as const;
-
-const BASE_CLASSES: Record<UINavLinkVariant, string> = {
-  pill: 'relative rounded-full px-3.5 py-1.5 text-small font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring',
-  drawer:
-    'rounded-2xl px-4 py-3 text-body font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring',
+/**
+ * Полные наборы классов строковыми литералами — чтобы сканер Tailwind видел
+ * каждый класс (склейка утилит из частей из JIT выпадает).
+ *
+ * Активное состояние — от `aria-current="location"`, а не от пропа: в шапке
+ * ссылки серверные, и атрибут им проставляет клиентский scroll-spy
+ * (`HeaderShell`) — стиль подхватывается без перерисовки React.
+ */
+const VARIANT_CLASSES: Record<UINavLinkVariant, string> = {
+  header:
+    'relative py-2 text-eyebrow uppercase text-muted-foreground outline-none transition-colors after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-brand-emphasis after:transition-transform after:duration-300 hover:text-foreground focus-visible:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background aria-[current=location]:text-foreground aria-[current=location]:after:scale-x-100',
+  menu: 'group flex items-baseline gap-4 py-3 font-serif text-[2.5rem] leading-none text-foreground outline-none transition-colors hover:text-brand-emphasis focus-visible:ring-2 focus-visible:ring-ring aria-[current=location]:text-brand-emphasis sm:text-[3.25rem]',
   footer:
-    'text-small text-muted-foreground transition-all duration-300 ease-out-expo hover:bg-linear-to-r hover:from-accent hover:via-amber-500 hover:to-orange-400 hover:bg-size-[200%_auto] hover:bg-clip-text hover:text-transparent hover:animate-rainbow-text',
-};
-
-const ACTIVE_CLASSES: Record<UINavLinkVariant, string> = {
-  pill: 'text-accent',
-  drawer: 'bg-accent/15 text-accent ring-1 ring-inset ring-accent/25',
-  footer: '',
-};
-
-const IDLE_CLASSES: Record<UINavLinkVariant, string> = {
-  pill: 'text-muted-foreground hover:text-foreground',
-  drawer: 'text-muted-foreground hover:bg-muted hover:text-foreground',
-  footer: '',
+    'text-small text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:ring-2 focus-visible:ring-ring',
 };
 
 /**
  * # Интерфейс пропсов для компонента UINavLink
  * @interface IUINavLinkProps
- * @property {string} href - маршрут приложения
+ * @property {string} href - якорь секции (`#about`)
  * @property {ReactNode} children - подпись пункта
  * @property {UINavLinkVariant} [variant] - вариант оформления
- * @property {boolean} [active] - текущий раздел (проставляет `aria-current="page"`)
- * @property {string} [layoutId] - общий `layoutId` подсветки для `pill`: активная
- *   «таблетка» переезжает между пунктами вместо мгновенного перескока
+ * @property {boolean} [active] - секция сейчас на экране (`aria-current="location"`)
+ * @property {string} [index] - номер пункта для варианта `menu` («01»)
  * @property {MouseEventHandler<HTMLAnchorElement>} [onClick] - обработчик клика
  * @property {cnParams | string} [className] - доп. классы
  * @property {string} [dataName] - суффикс для `data-name`
@@ -57,47 +44,39 @@ export interface IUINavLinkProps {
   readonly children: ReactNode;
   readonly variant?: UINavLinkVariant;
   readonly active?: boolean;
-  readonly layoutId?: string;
+  readonly index?: string;
   readonly onClick?: MouseEventHandler<HTMLAnchorElement>;
   readonly className?: cnParams | string;
   readonly dataName?: string;
 }
 
 /**
- * Пункт навигации: locale-aware ссылка с состоянием «текущий раздел».
- * `aria-current="page"` проставляется автоматически — активность считывается
- * не только по цвету.
+ * Пункт навигации одностраничника — якорь на секцию. Активность (секция в
+ * центре экрана) передаётся не только цветом: `aria-current="location"`.
+ * Server-safe: обычный `<a>`, плавность скролла — CSS.
  *
  * @component
  */
 export const UINavLink: FC<IUINavLinkProps> = ({
   href,
   children,
-  variant = 'pill',
+  variant = 'header',
   active = false,
-  layoutId,
+  index,
   onClick,
   className,
   dataName,
 }) => (
-  <Link
+  <a
     href={href}
-    aria-current={active ? 'page' : undefined}
+    aria-current={active ? 'location' : undefined}
     onClick={onClick}
     data-name={dataName ? `UINavLink-${dataName}` : 'UINavLink'}
-    className={cn(
-      BASE_CLASSES[variant],
-      active ? ACTIVE_CLASSES[variant] : IDLE_CLASSES[variant],
-      className,
-    )}
+    className={cn(VARIANT_CLASSES[variant], className)}
   >
-    <Show when={variant === 'pill' && active && layoutId !== undefined}>
-      <motion.span
-        layoutId={layoutId}
-        className="absolute inset-0 -z-10 rounded-full bg-accent/15 ring-1 ring-inset ring-accent/25"
-        transition={{ duration: 0.35, ease: EASE }}
-      />
-    </Show>
+    {variant === 'menu' && index ? (
+      <span className="font-sans text-eyebrow text-muted-foreground lining-nums">{index}</span>
+    ) : null}
     {children}
-  </Link>
+  </a>
 );

@@ -1,3 +1,10 @@
-export { SITE, ABOUT_PORTRAIT } from './site';
-export { NAV, type NavItem, type NavKey } from './nav';
+export { SITE } from './site';
+export { COPY } from './copy';
+export {
+  NAV,
+  SECTION_ID,
+  sectionHref,
+  type NavItem,
+  type SectionId,
+} from './nav';
 export { SOCIALS, type Social } from './socials';

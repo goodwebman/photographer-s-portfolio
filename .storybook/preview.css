@@ -1,0 +1,9 @@
+/* Вход CSS Storybook: те же токены, что у сайта (src/app/globals.css), но
+   сканируются и сторис — их демо-обёртки должны получить свои классы.
+   Сайт собирает свой вход без сторис и тестов — src/app/app.css. */
+@import "tailwindcss" source(none);
+
+@source "../src/**/*.{ts,tsx}";
+@source not "../src/**/*.test.{ts,tsx}";
+
+@import "../src/app/globals.css";

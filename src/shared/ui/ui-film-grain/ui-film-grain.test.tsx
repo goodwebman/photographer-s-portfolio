@@ -26,11 +26,11 @@ describe('UIFilmGrain', () => {
     expect(root).toHaveClass('pointer-events-none');
   });
 
-  it('по умолчанию закреплён на вьюпорте с плотностью 5%', () => {
+  it('по умолчанию закреплён на вьюпорте с плотностью 4%', () => {
     const root = getRoot(render(<UIFilmGrain />).container);
 
     expect(root).toHaveClass('fixed');
-    expect(root.style.opacity).toBe('0.05');
+    expect(root.style.opacity).toBe('0.04');
   });
 
   it('фактура — статичный SVG-шум feTurbulence в data-URI, без сетевых запросов', () => {
@@ -42,11 +42,11 @@ describe('UIFilmGrain', () => {
   });
 
   it('contained заливает родителя вместо вьюпорта; opacity настраивается', () => {
-    const root = getRoot(render(<UIFilmGrain contained opacity={0.04} />).container);
+    const root = getRoot(render(<UIFilmGrain contained opacity={0.06} />).container);
 
     expect(root).toHaveClass('absolute');
     expect(root).not.toHaveClass('fixed');
-    expect(root.style.opacity).toBe('0.04');
+    expect(root.style.opacity).toBe('0.06');
   });
 
   it('data-name по умолчанию и с суффиксом', () => {

@@ -4,13 +4,16 @@ import { SITE } from '@/shared/config';
 
 import { UILogo } from './ui-logo';
 
-/** `UILogo` — знак `</>` и имя. Единая точка правды для шапки и подвала. */
+/**
+ * `UILogo` — словесный знак бренда serif-курсивом; если в имени есть точка,
+ * она выделяется акцентом (`studio.frame`). Ведёт к началу страницы.
+ */
 const meta = {
   component: UILogo,
   tags: ['autodocs'],
   title: 'Site/UILogo',
   args: {
-    name: SITE.name,
+    name: SITE.brand,
     variant: 'header',
   },
   argTypes: {
@@ -22,8 +25,9 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-/** Шапка: круглый знак со свечением, подпись прячется на мобиле. */
 export const Header: Story = {};
 
-/** Подвал: скруглённый квадрат, подпись видна всегда. */
 export const Footer: Story = { args: { variant: 'footer' } };
+
+/** Бренд с точкой — точка выделяется акцентом. */
+export const WithDot: Story = { args: { name: 'studio.frame' } };

@@ -12,7 +12,7 @@ const meta = {
   tags: ['autodocs'],
   title: 'Site/UIFilmGrain',
   parameters: { layout: 'fullscreen' },
-  args: { contained: true, opacity: 0.05 },
+  args: { contained: true, opacity: 0.04 },
   argTypes: {
     opacity: { control: { type: 'range', min: 0, max: 0.4, step: 0.01 } },
   },

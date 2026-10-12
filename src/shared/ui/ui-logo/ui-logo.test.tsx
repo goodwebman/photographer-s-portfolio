@@ -1,11 +1,10 @@
 /**
  * @vitest-environment jsdom
  */
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { cleanup, screen } from '@testing-library/react';
-
-import { renderWithIntl } from '@/shared/lib/testing';
+import { cleanup, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { UILogo } from './ui-logo';
 
@@ -14,32 +13,39 @@ afterEach(() => {
 });
 
 describe('UILogo', () => {
-  it('ведёт на главную текущей локали и подписан именем', () => {
-    renderWithIntl(<UILogo name="Данил Шебалов" />);
+  it('по умолчанию ведёт к началу страницы', () => {
+    render(<UILogo name="studio.frame" />);
 
-    const link = screen.getByRole('link', { name: 'Данил Шебалов' });
-    expect(link).toHaveAttribute('href', '/ru');
+    expect(screen.getByRole('link', { name: 'studio.frame' })).toHaveAttribute('href', '#top');
   });
 
-  it('вариант header: круглый знак, подпись скрыта до sm', () => {
-    const { container } = renderWithIntl(<UILogo name="Имя" variant="header" />);
+  it('точка бренда выделена акцентом, текст читается целиком', () => {
+    const { container } = render(<UILogo name="studio.frame" />);
 
-    expect(container.querySelector('.rounded-full')).toBeInTheDocument();
-    expect(container.querySelector('.sm\\:inline')).toBeInTheDocument();
+    expect(container.querySelector('.text-brand-emphasis')).toHaveTextContent('.');
+    expect(screen.getByRole('link')).toHaveTextContent('studio.frame');
   });
 
-  it('вариант footer: скруглённый квадрат и всегда видимая подпись', () => {
-    const { container } = renderWithIntl(<UILogo name="Имя" variant="footer" />);
+  it('label заменяет доступное имя', () => {
+    render(<UILogo name="studio.frame" label="studio.frame — наверх" />);
 
-    expect(container.querySelector('.rounded-lg')).toBeInTheDocument();
-    expect(container.querySelector('.sm\\:inline')).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'studio.frame — наверх' })).toBeInTheDocument();
   });
 
-  it('знак скрыт от скринридера — имя не читается дважды', () => {
-    const { container } = renderWithIntl(<UILogo name="Имя" />);
+  it('бренд без точки рендерится как есть', () => {
+    const { container } = render(<UILogo name="Полина" />);
 
-    expect(container.querySelector('[aria-hidden="true"]')).toHaveTextContent(
-      '</>',
-    );
+    expect(screen.getByRole('link')).toHaveTextContent('Полина');
+    expect(container.querySelector('.text-brand-emphasis')).toBeNull();
+  });
+
+  it('вариант footer крупнее и клик пробрасывается', async () => {
+    const onClick = vi.fn();
+    render(<UILogo name="a.f" variant="footer" onClick={onClick} />);
+
+    const link = screen.getByRole('link');
+    expect(link).toHaveClass('text-h2');
+    await userEvent.click(link);
+    expect(onClick).toHaveBeenCalledTimes(1);
   });
 });

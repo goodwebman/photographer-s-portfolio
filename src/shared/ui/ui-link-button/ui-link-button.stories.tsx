@@ -1,19 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { LuArrowRight } from 'react-icons/lu';
+import { ArrowUpRightIcon } from '../icons';
 
 import { UILinkButton } from './ui-link-button';
 
 /**
  * `UILinkButton` — навигационный CTA: выглядит как `UIButton` кита, но
- * семантически ссылка. Элемент выбирается по `href`: маршрут приложения →
- * locale-aware `Link`, http(s) → `<a target="_blank">`, `mailto:` → обычный `<a>`.
+ * семантически ссылка. Элемент выбирается по `href`: якорь секции и
+ * `mailto:` → обычный `<a>`, маршрут → `next/link`, http(s) → `<a target="_blank">`.
  */
 const meta = {
   component: UILinkButton,
   tags: ['autodocs'],
   title: 'Site/UILinkButton',
   args: {
-    href: '/portfolio',
+    href: '#portfolio',
     children: 'Смотреть работы',
     variant: 'primary',
     size: 'md',
@@ -44,7 +44,7 @@ export const WithIcon: Story = {
     children: (
       <>
         Смотреть работы
-        <LuArrowRight className="size-5" />
+        <ArrowUpRightIcon className="size-5" />
       </>
     ),
   },

@@ -1,10 +1,18 @@
-@import "tailwindcss";
+/* Токены дизайн-системы и базовые стили. Не самостоятельный вход: Tailwind
+   и источники классов подключает вход — src/app/app.css (сайт) или
+   .storybook/preview.css (Storybook). */
 
 /* dark-вариант по data-атрибуту (не по .dark и не по prefers-color-scheme).
    Работает и для локально тёмных секций: `<section data-theme="dark">`. */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* Плавный скролл (в т.ч. программный scroll-to-top при навигации); отключаем при reduced-motion */
+/* Одностраничник: навигация — якоря. Плавный скролл к секциям (кроме
+   reduced-motion) и отступ под фиксированную шапку, чтобы заголовок секции
+   не уезжал под неё. */
+html {
+  scroll-padding-top: 4.5rem;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
@@ -15,44 +23,50 @@
    РАНТАЙМ-ТОКЕНЫ
    Имена совпадают с UI-китом (src/shared/kit) — его компоненты окрашиваются
    палитрой сайта без правок. Семантика кита: `--accent` — тихая hover-подложка,
-   НЕ бренд. Бренд-красный — `--brand*`.
+   НЕ бренд. Бренд-акцент — `--brand*`.
 
-   «День» — тёплая бумага (реф. 1), «Ночь» — чернила и красный (реф. 3).
-   Контраст пар посчитан (WCAG AA): muted-foreground на background/card/muted
-   ≥ 4.9:1, brand-foreground на brand ≥ 6:1, brand-emphasis на тёмном
-   background ≈ 4.9:1. Ограничения «Ночи»: brand-emphasis на muted — 4.25:1
-   (не ставить), на paper — 4.5:1 (только крупный текст); текст на brand —
-   только brand-foreground с непрозрачностью ≥ 90%.
+   «Ночь» — тёплый плёночный графит (не холодный #000), костяной белый текст.
+   «День» — тёплая бумага и чернила. Акцент в обеих темах — терракота: рифма к
+   рыжим волосам и натриевым фонарям на кадрах Полины и комплементарная пара
+   к синим ночным снимкам. Акцент дозированный: курсивные слова, eyebrow,
+   цифры, активный пункт меню — никаких сплошных цветных плит.
+
+   Контраст пар (WCAG 2.x), «Ночь» / «День»:
+   - foreground на background/surface/card/muted — ≥ 13 : 1 / ≥ 12.8 : 1;
+   - muted-foreground на background/surface/card/muted — ≥ 5.9 / ≥ 4.6 : 1;
+   - brand-emphasis на background/surface/card — ≥ 6.2 / ≥ 4.7 : 1;
+   - brand-foreground на brand — 7 : 1 / 5.6 : 1.
+   Ограничение «Дня»: brand-emphasis на muted — 4.4 : 1, мелким текстом не ставить.
    ============================================================ */
 :root,
 [data-theme="light"] {
   color-scheme: light;
   --radius: 0.25rem;
 
-  --background: #f4efe8;
-  --foreground: #151413;
-  --card: #fbf9f5;
-  --card-foreground: #151413;
-  --popover: #fbf9f5;
-  --popover-foreground: #151413;
-  --muted: #eae3d9;
-  --muted-foreground: #675e55;
-  --accent: #ede6dc;
-  --accent-foreground: #151413;
-  --primary: #151413;
-  --primary-foreground: #f4efe8;
-  --secondary: #eae3d9;
-  --secondary-foreground: #151413;
-  --border: #dcd3c7;
-  --input: #d3c9bc;
-  --ring: #a3141a;
+  --background: #f2ede4;
+  --foreground: #1c1915;
+  --card: #faf7f1;
+  --card-foreground: #1c1915;
+  --popover: #faf7f1;
+  --popover-foreground: #1c1915;
+  --muted: #e4dcce;
+  --muted-foreground: #675e53;
+  --accent: #e9e2d6;
+  --accent-foreground: #1c1915;
+  --primary: #1c1915;
+  --primary-foreground: #f2ede4;
+  --secondary: #e4dcce;
+  --secondary-foreground: #1c1915;
+  --border: #d9d0c2;
+  --input: #cfc5b5;
+  --ring: #a04a26;
 
-  /* бренд: заливка красных блоков, текст на ней, красный текст на фоне */
-  --brand: #a3141a;
-  --brand-foreground: #fbf9f5;
-  --brand-emphasis: #a3141a;
-  /* тёплые плашки (текстовые плитки, контакты) */
-  --paper: #e9ddcd;
+  /* бренд: заливка акцентных элементов, текст на ней, акцентный текст на фоне */
+  --brand: #a04a26;
+  --brand-foreground: #faf7f1;
+  --brand-emphasis: #a04a26;
+  /* второй фон секций — ритм страницы без цветных плит */
+  --surface: #eae3d7;
 
   /* статусы — значения кита (tokens.css, :root) */
   --destructive: oklch(0.57 0.23 27);
@@ -72,28 +86,28 @@
 [data-theme="dark"] {
   color-scheme: dark;
 
-  --background: #0e0e0f;
-  --foreground: #efe9e1;
-  --card: #161618;
-  --card-foreground: #efe9e1;
-  --popover: #161618;
-  --popover-foreground: #efe9e1;
-  --muted: #1e1e21;
-  --muted-foreground: #9c948a;
-  --accent: #232327;
-  --accent-foreground: #efe9e1;
-  --primary: #efe9e1;
-  --primary-foreground: #0e0e0f;
-  --secondary: #1e1e21;
-  --secondary-foreground: #efe9e1;
-  --border: #2a2a2e;
-  --input: #333338;
-  --ring: #e5484d;
+  --background: #100f0d;
+  --foreground: #eee7db;
+  --card: #1d1b17;
+  --card-foreground: #eee7db;
+  --popover: #1d1b17;
+  --popover-foreground: #eee7db;
+  --muted: #24211c;
+  --muted-foreground: #a59c8e;
+  --accent: #26231e;
+  --accent-foreground: #eee7db;
+  --primary: #eee7db;
+  --primary-foreground: #100f0d;
+  --secondary: #24211c;
+  --secondary-foreground: #eee7db;
+  --border: #2f2b25;
+  --input: #3a352e;
+  --ring: #d9895c;
 
-  --brand: #b3151b;
-  --brand-foreground: #f4efe8;
-  --brand-emphasis: #e5484d;
-  --paper: #1a1816;
+  --brand: #d9895c;
+  --brand-foreground: #100f0d;
+  --brand-emphasis: #d9895c;
+  --surface: #181613;
 
   /* статусы — значения кита (tokens.css, .dark) */
   --destructive: oklch(0.645 0.22 27);
@@ -151,10 +165,10 @@
   --color-brand: var(--brand);
   --color-brand-foreground: var(--brand-foreground);
   --color-brand-emphasis: var(--brand-emphasis);
-  --color-paper: var(--paper);
+  --color-surface: var(--surface);
 
   /* --- радиусы кита от --radius (0.25rem): sm = 0, md = 2px, lg = 4px, xl = 8px.
-         Фото и карточки без скругления, пилюли — только бейджи. --- */
+         Фото и карточки без скругления (острые углы во всех референсах). --- */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -167,16 +181,18 @@
 
   /* --- типографическая шкала ---
      hero — только «АПОЛЛИНАРИЯ» в hero: обязано влезать одной строкой на
-     360 / 768 / 1440 px. Замер в Chrome (Playfair Display, ls -0.02em):
-     «АПОЛЛИНАРИЯ» = 7.44em, «APOLLINARIA» = 6.15em — ограничивает кириллица.
-     11.5vw, а не стартовые 10.5vw: при 10.5vw на 360px hero (37.8px) мельче
-     минимума text-display (40px) — имя проигрывало заголовкам секций.
-     При 11.5vw: 360 → 41.4px = 308px из 328 доступных, 768 → 88.3px = 657
-     из 720, 1440 → 165.6px = 1231 из 1376 (поля 16/24/32px). Потолок 11rem
-     (1308px) — с ~1530px. */
-  --text-hero: clamp(2.25rem, 11.5vw, 11rem);
+     360 / 768 / 1440 px. Замер в Chrome (Playfair Display 400, ls -0.02em):
+     «АПОЛЛИНАРИЯ» = 7.44em. Поля контейнера 20 / 32 / 48 px:
+     360 → 41.4px = 308 из 320, 768 → 88.3px = 657 из 704,
+     1440 → 165.6px = 1231 из 1344. Потолок 10.5rem (168px = 1250px) — с
+     ~1460px, контейнер там уже упёрся в 88rem (1312px полезных). */
+  --text-hero: clamp(2.25rem, 11.5vw, 10.5rem);
   --text-hero--line-height: 0.9;
   --text-hero--letter-spacing: -0.02em;
+  /* title — заголовки секций («Мои работы», «Стоимость»). */
+  --text-title: clamp(2.25rem, 5.5vw, 4.75rem);
+  --text-title--line-height: 1.02;
+  --text-title--letter-spacing: -0.02em;
   --text-display: clamp(2.5rem, 7vw, 6rem);
   --text-display--line-height: 1;
   --text-display--letter-spacing: -0.02em;
@@ -205,6 +221,15 @@
   /* UI-кит: утилиты animate-shimmer / animate-progress (UISkeleton, UIProgress) */
   --animate-shimmer: ui-shimmer 1.8s infinite linear;
   --animate-progress: ui-progress 1.4s ease-in-out infinite;
+
+  /* UIFrameLoader: уголки автофокуса «ищут резкость»; появление с задержкой,
+     которую компонент задаёт инлайном (кэшированный кадр не мелькает лоадером) */
+  --animate-focus-hunt: ui-focus-hunt 1.8s ease-in-out infinite;
+  --animate-loader-in: ui-loader-in 0.4s ease-out both;
+
+  /* UIColumnLines: волосяные линии прорисовываются сверху вниз при загрузке.
+     Кривая — литералом: `@theme inline` не выводит `--ease-out-expo` в :root. */
+  --animate-line-draw: ui-line-draw 1.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @layer base {
@@ -234,23 +259,6 @@ button:not(:disabled),
   cursor: pointer;
 }
 
-/* Стартовые (скрытые) состояния для GSAP-ревилов — только когда анимации
-   разрешены. При reduced-motion контент виден сразу (JS-ревил пропускается),
-   и вспышки «видно → анимируется» не возникает. */
-@media (prefers-reduced-motion: no-preference) {
-  [data-gsap="word"] {
-    opacity: 0;
-    transform: translateY(1.1em);
-  }
-  [data-gsap="fade-up"] {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  [data-gsap="line"] {
-    transform: scaleY(0);
-  }
-}
-
 /* --- UI-кит: keyframes и reduced-motion (перенесено из tokens.css кита) --- */
 @keyframes ui-shimmer {
   0% { background-position: -200% 0; }
@@ -268,9 +276,112 @@ button:not(:disabled),
   to { transform: translateX(-50%); }
 }
 
+/* Автофокус «охотится»: рамка сжимается, проскакивает и снова отпускает. */
+@keyframes ui-focus-hunt {
+  0%, 100% { transform: scale(1); opacity: 0.55; }
+  40% { transform: scale(0.7); opacity: 1; }
+  55% { transform: scale(0.78); opacity: 1; }
+}
+
+@keyframes ui-loader-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes ui-line-draw {
+  from { scale: 1 0; }
+}
+
+/* ============================================================
+   REVEAL — scroll-reveal на CSS (UIReveal, UIWordReveal, сетка портфолио)
+   Разметка серверная: `data-reveal="fade" | "pieces"`. Момент старта ставит
+   inline-скрипт `revealBoot` (src/shared/lib/reveal): `data-reveal-ready` на
+   <html> — скрипт работает, `data-revealed` — элемент въехал во вьюпорт.
+   Без JS и при reduced-motion скрипт флаг не ставит — контент виден сразу.
+   ============================================================ */
+
+/* Параметры не наследуются: вложенный ревил не подхватывает задержку
+   родителя. Значения по умолчанию UIReveal в разметку не пишет. */
+@property --reveal-delay {
+  syntax: "<time>";
+  inherits: false;
+  initial-value: 0s;
+}
+
+@property --reveal-y {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 24px;
+}
+
+@property --reveal-scale {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+
+@keyframes ui-piece-in {
+  from {
+    opacity: 0;
+    translate: 0 0.5em;
+    filter: blur(10px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal="fade"] {
+    transition:
+      opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay),
+      translate 0.6s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay),
+      scale 0.6s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay);
+  }
+
+  :root[data-reveal-ready] [data-reveal="fade"]:not([data-revealed]) {
+    opacity: 0;
+    translate: 0 var(--reveal-y);
+    scale: var(--reveal-scale);
+  }
+
+  /* Каскад по словам/буквам: задержка куска = старт + индекс × шаг. */
+  :root[data-reveal-ready] [data-reveal="pieces"]:not([data-revealed]) [data-piece] {
+    opacity: 0;
+  }
+
+  :root[data-reveal-ready] [data-reveal="pieces"][data-revealed] [data-piece] {
+    animation: ui-piece-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--pieces-delay, 0s) + var(--i, 0) * var(--pieces-stagger, 0.06s));
+  }
+}
+
+/* Печать: страница целиком, даже то, до чего не доскроллили. */
+@media print {
+  [data-reveal],
+  [data-piece] {
+    opacity: 1 !important;
+    translate: none !important;
+    scale: none !important;
+    filter: none !important;
+    animation: none !important;
+  }
+}
+
+/* ============================================================
+   PHOTO TILE — лоадер кадра (UIPhotoTile в сетке портфолио)
+   Только после гидратации галереи (`data-tiles-ready`) и пока кадр не
+   загрузился (`data-loaded` ставит PortfolioGrid). Вне @layer: перебивает
+   `flex` утилиты лоадера.
+   ============================================================ */
+[data-tile-loader] {
+  display: none;
+}
+
+[data-tiles-ready] [data-photo-tile]:not([data-loaded]) [data-tile-loader] {
+  display: block;
+}
+
 /* Системная настройка «уменьшить движение»: гасим transitions/animations
-   (UIMarquee замирает, shimmer/progress стоят). JS-анимации (motion, GSAP)
-   уважают её сами через useReducedMotion. */
+   (UIMarquee замирает, shimmer/progress стоят). JS-анимации (motion) уважают
+   её сами: MotionConfig reducedMotion="user" + useReducedMotion. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

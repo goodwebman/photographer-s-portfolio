@@ -10,7 +10,7 @@ const meta = {
   tags: ['autodocs'],
   title: 'Site/UITextLink',
   args: {
-    href: '/portfolio',
+    href: '#portfolio',
     children: 'Все работы →',
     tone: 'brand',
   },

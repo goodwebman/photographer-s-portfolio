@@ -1,0 +1,19 @@
+/* Вход CSS приложения. Токены и базовые стили — в ./globals.css.
+
+   Источники классов заданы явно (`source(none)` + `@source`): иначе Tailwind
+   сканирует весь проект, и в продовый CSS попадают классы из
+   `*.stories.tsx` / `*.test.tsx` (обёртки, демо-раскладки) и из компонентов
+   UI-кита, которых нет в вёрстке. Storybook собирает свой вход —
+   `.storybook/preview.css`, там сканируется всё. */
+@import "tailwindcss" source(none);
+
+@source "../**/*.{ts,tsx}";
+@source not "../**/*.stories.tsx";
+@source not "../**/*.test.{ts,tsx}";
+
+/* Компоненты кита, которые сайт не использует. Начали использовать — убрать
+   из списка, иначе их классов не будет в CSS: напомнит тест
+   `src/app/app-css-sources.test.ts`. */
+@source not "../shared/kit/components/{UIAccordion,UIAvatar,UIBadge,UIBreadcrumb,UICard,UICarousel,UICheckbox,UIDropdownMenu,UIInput,UIKbd,UILabel,UIOtpInput,UIPagination,UIPhoneInput,UIPopover,UIProgress,UIRadioGroup,UIRail,UIRating,UISearchInput,UISelect,UISeparator,UIShow,UIShowcase,UISkeleton,UISlider,UISpinner,UISpotlightCard,UIStat,UISwitch,UITabs,UITextarea,UITiltCard,UITimeline,UIToast,UITooltip,UIVirtualGrid,UIVirtualList}/**";
+
+@import "./globals.css";

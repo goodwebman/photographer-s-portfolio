@@ -1,11 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { buildAlternates } from './alternates';
-import {
-  buildBreadcrumbJsonLd,
-  buildPersonJsonLd,
-} from './json-ld';
-import { buildPageMetadata } from './page-metadata';
+import { SITE } from '@/shared/config';
+
+import { buildPersonJsonLd, buildServiceJsonLd, buildWebSiteJsonLd } from './json-ld';
 import { absoluteUrl, SITE_URL } from './site-url';
 
 describe('absoluteUrl', () => {
@@ -18,71 +15,42 @@ describe('absoluteUrl', () => {
   });
 });
 
-describe('buildAlternates', () => {
-  it('канонический URL указывает на текущую локаль', () => {
-    expect(buildAlternates('en', '/portfolio').canonical).toBe(
-      `${SITE_URL}/en/portfolio`,
-    );
-  });
-
-  it('перечисляет все локали и x-default на дефолтную', () => {
-    const { languages } = buildAlternates('en', '/about');
-
-    expect(languages.ru).toBe(`${SITE_URL}/ru/about`);
-    expect(languages.en).toBe(`${SITE_URL}/en/about`);
-    expect(languages['x-default']).toBe(`${SITE_URL}/ru/about`);
-  });
-});
-
-describe('buildPageMetadata', () => {
-  it('og:url совпадает с каноническим — страницы не склеиваются в одну', () => {
-    const meta = buildPageMetadata({
-      locale: 'ru',
-      href: '/contact',
-      title: 'Контакты',
-      description: 'Описание',
-    });
-
-    expect(meta.alternates?.canonical).toBe(`${SITE_URL}/ru/contact`);
-    expect(meta.openGraph?.url).toBe(`${SITE_URL}/ru/contact`);
-    expect(meta.openGraph?.title).toBe('Контакты');
-  });
-
-  it('дополнения Open Graph не затирают базовые поля', () => {
-    const meta = buildPageMetadata({
-      locale: 'ru',
-      href: '/portfolio/x',
-      title: 'X',
-      description: 'D',
-      openGraph: { type: 'article' },
-    });
-
-    expect(meta.openGraph?.title).toBe('X');
-    expect(meta.openGraph?.url).toBe(`${SITE_URL}/ru/portfolio/x`);
-  });
-});
-
 describe('json-ld', () => {
-  it('Person содержит профили в sameAs и стабильный @id', () => {
-    const node = buildPersonJsonLd({
-      locale: 'ru',
-      jobTitle: 'Фотограф',
-      description: 'D',
-    });
+  it('Person: стабильный @id, город и профили в sameAs', () => {
+    const node = buildPersonJsonLd();
 
     expect(node['@type']).toBe('Person');
     expect(node['@id']).toBe(`${SITE_URL}#person`);
-    expect(Array.isArray(node.sameAs)).toBe(true);
+    expect(node.address).toMatchObject({ addressLocality: SITE.city });
+    expect(node.sameAs).toEqual([SITE.telegram, SITE.instagram]);
   });
 
-  it('хлебные крошки нумеруются с единицы и ведут на локализованные URL', () => {
-    const node = buildBreadcrumbJsonLd('en', [
-      { name: 'Home', href: '/' },
-      { name: 'Portfolio', href: '/portfolio' },
-    ]);
-    const items = node.itemListElement as { position: number; item: string }[];
+  it('ProfessionalService: тарифы с ценой за час в рублях', () => {
+    const node = buildServiceJsonLd(
+      [
+        { name: 'Индивидуальная съёмка', price: 3000 },
+        { name: 'Парная съёмка', price: 3500 },
+      ],
+      '3000–3500 RUB',
+    );
+    const offers = node.makesOffer as {
+      name: string;
+      priceSpecification: { price: number; priceCurrency: string; unitCode: string };
+    }[];
 
-    expect(items[0].position).toBe(1);
-    expect(items[1].item).toBe(`${SITE_URL}/en/portfolio`);
+    expect(node.priceRange).toBe('3000–3500 RUB');
+    expect(offers).toHaveLength(2);
+    expect(offers[1].priceSpecification).toMatchObject({
+      price: 3500,
+      priceCurrency: 'RUB',
+      unitCode: 'HUR',
+    });
+  });
+
+  it('WebSite: русский язык и ссылка на автора', () => {
+    const node = buildWebSiteJsonLd();
+
+    expect(node.inLanguage).toBe('ru');
+    expect(node.author).toEqual({ '@id': `${SITE_URL}#person` });
   });
 });

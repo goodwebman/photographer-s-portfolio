@@ -5,8 +5,8 @@ import { UIButton } from '@/shared/kit';
 import { UISectionHeading } from './ui-section-heading';
 
 /**
- * `UISectionHeading` — заголовок секции: eyebrow + title + описание (+ опц.
- * действие справа). Server-safe, ревил через клиентский `UIReveal`.
+ * `UISectionHeading` — заголовок секции в редакционной манере: «02 — ПОРТФОЛИО»,
+ * крупный serif, подводка, опц. действие справа. Server-safe.
  */
 const meta = {
   component: UISectionHeading,
@@ -14,22 +14,18 @@ const meta = {
   title: 'Site/UISectionHeading',
   decorators: [
     (Story) => (
-      <div className="w-full max-w-3xl">
+      <div className="w-4xl max-w-full">
         <Story />
       </div>
     ),
   ],
   args: {
-    title: 'Мои работы',
+    index: '02',
     eyebrow: 'Портфолио',
-    description: 'Стрит, портреты, love story и детские съёмки в Омске.',
-    align: 'left',
+    title: 'Мои работы',
+    description: 'Нажмите на кадр, чтобы открыть его целиком.',
   },
   argTypes: {
-    align: {
-      control: 'inline-radio',
-      options: ['left', 'center'],
-    },
     action: { control: false },
   },
 } satisfies Meta<typeof UISectionHeading>;
@@ -40,10 +36,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Centered: Story = {
-  args: { align: 'center' },
-};
-
 export const TitleOnly: Story = {
   args: { eyebrow: undefined, description: undefined },
 };
@@ -52,7 +44,7 @@ export const WithAction: Story = {
   args: {
     action: (
       <UIButton variant="outline" size="sm">
-        Все работы
+        Записаться
       </UIButton>
     ),
   },

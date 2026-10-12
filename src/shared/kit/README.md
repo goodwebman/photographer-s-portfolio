@@ -109,13 +109,18 @@ UIDialogOverlay, UIPaginationButton, иконки и чистые утилиты
 проекта:
 
 - `UIDropdownMenu` не закрывается по клику снаружи — только Esc, выбор пункта
-  или повторный клик по триггеру. Поэтому языковой свитчер построен на
-  `UISelect`.
+  или повторный клик по триггеру. Для списков выбора брать `UISelect`.
 - `UISelect` показывает в триггере само значение (`value`), а не подпись
-  опции. Для свитчера это код локали (`ru` → `RU` через `uppercase`).
+  опции.
 - `UIAlert` в вариантах `info`/`success`/`warning` и `UIToast` красят себя
   захардкоженными палитрами Tailwind (`bg-blue-50 …`), а не токенами. На сайте
   используется только нейтральный `UIAlert variant="default"`.
+- `UIAlert` всегда ставит `role="alert"` (assertive live region). Для
+  статичной сноски это неверно — скринридер зачитает её при загрузке, —
+  поэтому на сайте роль переопределяется пропсом: `<UIAlert role="note">`.
+- `UIDialog.Content` центрирует панель `max-w-lg` с паддингами. Полноэкранные
+  оверлеи (мобильное меню, лайтбокс) переопределяют это классами
+  (`h-dvh max-w-none rounded-none border-0 p-0`), логику кита не трогая.
 - Классы `animate-in` / `slide-in-from-*` в UIDialogOverlay/UIToast/UIDropdownMenu
   рассчитаны на `tailwindcss-animate`, которого нет ни в ките, ни здесь, —
   это no-op.

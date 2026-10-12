@@ -3,10 +3,8 @@
  */
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { cleanup, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
-import { renderWithIntl } from '@/shared/lib/testing';
 
 import { UINavLink } from './ui-nav-link';
 
@@ -15,49 +13,53 @@ afterEach(() => {
 });
 
 describe('UINavLink', () => {
-  it('активный пункт помечается aria-current="page"', () => {
-    renderWithIntl(
-      <UINavLink href="/projects" active>
-        Проекты
+  it('якорь на секцию', () => {
+    render(<UINavLink href="#about">Обо мне</UINavLink>);
+
+    expect(screen.getByRole('link', { name: 'Обо мне' })).toHaveAttribute('href', '#about');
+  });
+
+  it('активный пункт помечается aria-current="location"', () => {
+    render(
+      <UINavLink href="#about" active>
+        Обо мне
       </UINavLink>,
     );
 
-    expect(screen.getByRole('link')).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('link')).toHaveAttribute('aria-current', 'location');
   });
 
   it('неактивный пункт без aria-current', () => {
-    renderWithIntl(<UINavLink href="/projects">Проекты</UINavLink>);
+    render(<UINavLink href="#about">Обо мне</UINavLink>);
 
     expect(screen.getByRole('link')).not.toHaveAttribute('aria-current');
   });
 
-  it('вариант drawer подсвечивает активный пункт фоном', () => {
-    renderWithIntl(
-      <UINavLink href="/about" variant="drawer" active>
-        Обо мне
+  it('вариант menu показывает номер пункта', () => {
+    render(
+      <UINavLink href="#services" variant="menu" index="03">
+        Услуги
       </UINavLink>,
     );
 
-    expect(screen.getByRole('link')).toHaveClass('bg-accent/15');
+    expect(screen.getByRole('link')).toHaveTextContent('03Услуги');
   });
 
-  it('вариант footer не завязан на состояние активности', () => {
-    renderWithIntl(
-      <UINavLink href="/about" variant="footer" active>
-        Обо мне
+  it('номер не рисуется в других вариантах', () => {
+    render(
+      <UINavLink href="#services" index="03">
+        Услуги
       </UINavLink>,
     );
 
-    const link = screen.getByRole('link');
-    expect(link).toHaveClass('text-muted-foreground');
-    expect(link).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('link')).toHaveTextContent(/^Услуги$/);
   });
 
   it('клик пробрасывается наружу', async () => {
     const onClick = vi.fn();
-    renderWithIntl(
-      <UINavLink href="/about" onClick={onClick}>
-        Обо мне
+    render(
+      <UINavLink href="#contact" onClick={onClick}>
+        Контакты
       </UINavLink>,
     );
 

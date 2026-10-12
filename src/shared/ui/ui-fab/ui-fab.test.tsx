@@ -15,14 +15,14 @@ afterEach(() => {
 const noop = () => undefined;
 
 describe('UIFab', () => {
-  it('скрыта, пока visible=false', () => {
-    render(
+  it('скрыта и недоступна (inert), пока visible=false', () => {
+    const { container } = render(
       <UIFab visible={false} label="Наверх" onClick={noop}>
         <svg />
       </UIFab>,
     );
 
-    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    expect(container.firstElementChild).toHaveAttribute('inert');
   });
 
   it('показывается с доступным именем при visible=true', () => {
@@ -33,6 +33,7 @@ describe('UIFab', () => {
     );
 
     expect(screen.getByRole('button', { name: 'Наверх' })).toBeInTheDocument();
+    expect(screen.getByRole('button').parentElement).not.toHaveAttribute('inert');
   });
 
   it('клик пробрасывается наружу', async () => {

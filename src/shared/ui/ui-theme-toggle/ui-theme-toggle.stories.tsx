@@ -4,7 +4,7 @@ import { UIThemeToggle } from './ui-theme-toggle';
 
 /**
  * `UIThemeToggle` — переключатель темы с анимированным crossfade sun/moon.
- * Работает через `ThemeProvider` (подключён глобальным декоратором Storybook).
+ * Тема — атрибут `data-theme` на `<html>` (декоратор Storybook ставит его из тулбара).
  */
 const meta = {
   component: UIThemeToggle,

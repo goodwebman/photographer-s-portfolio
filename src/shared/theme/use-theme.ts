@@ -1,16 +1,25 @@
 'use client';
 
-import { useContext } from 'react';
+import { useCallback, useMemo, useSyncExternalStore } from 'react';
 
-import { ThemeContext } from './theme-context';
-import type { IThemeContextValue } from './types';
+import { applyTheme, getServerTheme, readTheme, subscribeTheme } from './theme-store';
+import type { IThemeContextValue, Theme } from './types';
 
-/** Доступ к контексту темы. Кидает при использовании вне `<ThemeProvider>`. */
+/**
+ * Тема сайта. Без провайдера: состояние живёт в `data-theme` на `<html>`.
+ * В SSR и при гидратации — тема по умолчанию, сразу после — реальная (React
+ * сам перерисует расходящиеся места, без hydration mismatch).
+ */
 export const useTheme = (): IThemeContextValue => {
-  const ctx = useContext(ThemeContext);
-  if (ctx === null) {
-    throw new Error('useTheme должен вызываться внутри <ThemeProvider>');
-  }
+  const theme = useSyncExternalStore(subscribeTheme, readTheme, getServerTheme);
 
-  return ctx;
+  const setTheme = useCallback((next: Theme) => {
+    applyTheme(next);
+  }, []);
+
+  const toggleTheme = useCallback(() => {
+    applyTheme(readTheme() === 'dark' ? 'light' : 'dark');
+  }, []);
+
+  return useMemo(() => ({ theme, setTheme, toggleTheme }), [theme, setTheme, toggleTheme]);
 };

@@ -20,7 +20,7 @@ export const FILM_GRAIN_IMAGE = `url("data:image/svg+xml,${encodeURIComponent(NO
 /**
  * # Интерфейс пропсов для компонента UIFilmGrain
  * @interface IUIFilmGrainProps
- * @property {number} [opacity] - плотность зерна, 0..1 (по умолчанию 0.05)
+ * @property {number} [opacity] - плотность зерна, 0..1 (по умолчанию 0.04)
  * @property {boolean} [contained] - залить родителя (`absolute`) вместо вьюпорта (`fixed`)
  * @property {cnParams | string} [className] - доп. классы
  * @property {string} [dataName] - суффикс для `data-name`
@@ -38,7 +38,9 @@ export interface IUIFilmGrainProps {
  * «бумаги»/плёнки, не спорит с фотографиями и ничего не стоит по CPU.
  *
  * Чисто декоративный слой: `aria-hidden`, `pointer-events-none` — клики и
- * выделение текста проходят сквозь него. Server-safe (без хуков).
+ * выделение текста проходят сквозь него. `z-30` — под шапкой (`z-40`) и
+ * лайтбоксом (`z-50`): кадр в полноэкранном просмотре показывается чистым.
+ * Server-safe (без хуков).
  *
  * @component
  * @example
@@ -47,7 +49,7 @@ export interface IUIFilmGrainProps {
  * ```
  */
 export const UIFilmGrain: FC<IUIFilmGrainProps> = ({
-  opacity = 0.05,
+  opacity = 0.04,
   contained = false,
   className,
   dataName,
@@ -59,7 +61,7 @@ export const UIFilmGrain: FC<IUIFilmGrainProps> = ({
       aria-hidden="true"
       data-name={dataName ? `UIFilmGrain-${dataName}` : 'UIFilmGrain'}
       className={cn(
-        'pointer-events-none inset-0 z-60 bg-repeat',
+        'pointer-events-none inset-0 z-30 bg-repeat',
         contained ? 'absolute' : 'fixed',
         className,
       )}

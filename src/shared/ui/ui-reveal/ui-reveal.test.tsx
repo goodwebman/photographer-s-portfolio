@@ -30,4 +30,25 @@ describe('UIReveal', () => {
     expect(root).toHaveAttribute('data-name', 'UIReveal-hero');
     expect(root).toHaveClass('grid');
   });
+
+  it('помечен для CSS-ревила; значения по умолчанию в разметку не пишутся', () => {
+    const { container } = render(<UIReveal>x</UIReveal>);
+    const root = getRoot(container);
+
+    expect(root).toHaveAttribute('data-reveal', 'fade');
+    expect(root).not.toHaveAttribute('style');
+  });
+
+  it('задержка, сдвиг и масштаб — CSS-переменными', () => {
+    const { container } = render(
+      <UIReveal delay={0.5} y={12} scale={0.94}>
+        x
+      </UIReveal>,
+    );
+    const { style } = getRoot(container);
+
+    expect(style.getPropertyValue('--reveal-delay')).toBe('0.5s');
+    expect(style.getPropertyValue('--reveal-y')).toBe('12px');
+    expect(style.getPropertyValue('--reveal-scale')).toBe('0.94');
+  });
 });

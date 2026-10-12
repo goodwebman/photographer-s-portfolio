@@ -2,6 +2,9 @@
   "name": "polina-site",
   "version": "0.1.0",
   "private": true,
+  "sideEffects": [
+    "*.css"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -13,17 +16,13 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@gsap/react": "^2.1.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "gsap": "^3.15.0",
-    "motion": "^12.42.2",
     "next": "16.2.10",
-    "next-intl": "^4.13.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "react-icons": "^5.7.0",
     "react-virtuoso": "^4.18.10",
+    "sharp": "^0.34.5",
     "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {

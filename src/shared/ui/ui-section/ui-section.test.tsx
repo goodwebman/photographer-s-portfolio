@@ -23,21 +23,37 @@ describe('UISection', () => {
     const { container: c1 } = render(<UISection>x</UISection>);
     expect(getRoot(c1)).toHaveAttribute('data-name', 'UISection');
 
-    const { container: c2 } = render(<UISection dataName="skills">x</UISection>);
-    expect(getRoot(c2)).toHaveAttribute('data-name', 'UISection-skills');
+    const { container: c2 } = render(<UISection dataName="about">x</UISection>);
+    expect(getRoot(c2)).toHaveAttribute('data-name', 'UISection-about');
   });
 
-  it('прокидывает id-якорь и вертикальные отступы', () => {
+  it('прокидывает id-якорь, отступы и доп. классы', () => {
     const { container } = render(
-      <UISection id="skills" className="bg-muted">
+      <UISection id="about" className="overflow-hidden">
         Секция
       </UISection>,
     );
     const root = getRoot(container);
     expect(root.tagName).toBe('SECTION');
-    expect(root).toHaveAttribute('id', 'skills');
-    expect(root).toHaveClass('py-16');
-    expect(root).toHaveClass('bg-muted');
+    expect(root).toHaveAttribute('id', 'about');
+    expect(root).toHaveClass('py-20', 'overflow-hidden', 'bg-background');
     expect(screen.getByText('Секция')).toBeInTheDocument();
+  });
+
+  it('tone="surface" — второй фон секций', () => {
+    const { container } = render(<UISection tone="surface">x</UISection>);
+
+    expect(getRoot(container)).toHaveClass('bg-surface');
+    expect(getRoot(container)).not.toHaveClass('bg-background');
+  });
+
+  it('с ariaLabelledby секция — именованный регион', () => {
+    render(
+      <UISection ariaLabelledby="t">
+        <h2 id="t">Мои работы</h2>
+      </UISection>,
+    );
+
+    expect(screen.getByRole('region', { name: 'Мои работы' })).toBeInTheDocument();
   });
 });
